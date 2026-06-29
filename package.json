@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://vashtag.github.io/portfolio/",
+  "homepage": "https://vashtag.github.io/Portfolio/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
