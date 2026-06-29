@@ -35,8 +35,8 @@ The site deploys to **GitHub Pages** via
 `main`. In the repository settings, set **Settings → Pages → Build and
 deployment → Source** to **GitHub Actions**.
 
-The production base path is `/portfolio/` (see `vite.config.ts`), serving the
-site at `https://vashtag.github.io/portfolio/`. If the repository name changes,
+The production base path is `/Portfolio/` (see `vite.config.ts`), serving the
+site at `https://vashtag.github.io/Portfolio/`. If the repository name changes,
 update `base` in `vite.config.ts` and `homepage` in `package.json`.
 
 ## Accessibility & performance
