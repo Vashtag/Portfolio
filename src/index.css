@@ -37,6 +37,7 @@ body::after {
     3px 100%;
   pointer-events: none;
   opacity: 0.3;
+  animation: crtScanDrift 9s steps(2, end) infinite;
 }
 
 .crt-power-on {
@@ -110,6 +111,45 @@ body::after {
   transform-origin: 50% 50%;
 }
 
+@media (min-width: 768px) {
+  body::after {
+    opacity: 0.4;
+  }
+
+  .crt-power-on {
+    background:
+      radial-gradient(circle at center, rgba(166, 255, 184, 0.16), transparent 30%),
+      #000201;
+    animation-duration: 2.65s;
+  }
+
+  .crt-power-on::before,
+  .crt-power-on::after {
+    animation-duration: 2.65s;
+  }
+
+  .crt-power-line {
+    height: 3px;
+    box-shadow:
+      0 0 14px rgba(232, 255, 238, 1),
+      0 0 48px rgba(0, 230, 57, 0.95),
+      0 0 140px rgba(0, 230, 57, 0.72),
+      0 0 220px rgba(0, 230, 57, 0.34);
+    animation: crtPowerLineDesktop 1.75s cubic-bezier(0.18, 0.9, 0.18, 1) forwards;
+  }
+
+  .crt-power-glow {
+    width: 150vw;
+    height: 150vh;
+    filter: blur(28px);
+    animation: crtPowerBloomDesktop 2.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .crt-boot-content {
+    animation: crtBootContentDesktop 2.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
 @keyframes crtPowerShell {
   0%,
   54% {
@@ -157,6 +197,45 @@ body::after {
   }
 }
 
+@keyframes crtPowerLineDesktop {
+  0% {
+    width: 0;
+    height: 1px;
+    opacity: 0;
+  }
+  12% {
+    width: 18vw;
+    opacity: 1;
+  }
+  26% {
+    width: 108vw;
+    height: 4px;
+    opacity: 1;
+  }
+  38% {
+    width: 116vw;
+    height: 7px;
+    opacity: 0.9;
+    transform: translate(-50%, -50%) translateX(-8px);
+  }
+  48% {
+    height: 2px;
+    opacity: 1;
+    transform: translate(-50%, -50%) translateX(6px);
+  }
+  64% {
+    width: 122vw;
+    height: 34vh;
+    opacity: 0.82;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    width: 130vw;
+    height: 130vh;
+    opacity: 0;
+  }
+}
+
 @keyframes crtPowerBloom {
   0%,
   22% {
@@ -174,6 +253,34 @@ body::after {
   100% {
     opacity: 0;
     transform: translate(-50%, -50%) scaleY(1);
+  }
+}
+
+@keyframes crtPowerBloomDesktop {
+  0%,
+  18% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scaleY(0.006) scaleX(0.92);
+  }
+  35% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scaleY(0.022) scaleX(1.04);
+  }
+  50% {
+    opacity: 0.72;
+    transform: translate(-50%, -50%) scaleY(0.08) scaleX(1.01);
+  }
+  70% {
+    opacity: 0.56;
+    transform: translate(-50%, -50%) scaleY(1.08) scaleX(1);
+  }
+  82% {
+    opacity: 0.22;
+    transform: translate(-50%, -50%) scaleY(0.96) scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scaleY(1) scaleX(1);
   }
 }
 
@@ -238,6 +345,63 @@ body::after {
     opacity: 1;
     filter: none;
     transform: none;
+  }
+}
+
+@keyframes crtBootContentDesktop {
+  0%,
+  46% {
+    opacity: 0;
+    filter: brightness(0) contrast(2.1) saturate(0.25);
+    transform: scaleY(0.001) translateX(0);
+  }
+  52% {
+    opacity: 0.88;
+    filter: brightness(3.4) contrast(1.8) saturate(1.45);
+    transform: scaleY(0.025) translateX(-10px);
+  }
+  58% {
+    opacity: 0.62;
+    filter: brightness(0.55) contrast(2.2) saturate(0.8);
+    transform: scaleY(0.18) translateX(8px);
+  }
+  66% {
+    opacity: 1;
+    filter: brightness(1.9) contrast(1.45) saturate(1.25);
+    transform: scaleY(1.035) translateX(-3px);
+  }
+  72% {
+    opacity: 0.74;
+    filter: brightness(0.7) contrast(1.8) saturate(0.85);
+    transform: scaleY(0.985) translateX(3px);
+  }
+  80% {
+    opacity: 1;
+    filter: brightness(1.35) contrast(1.28) saturate(1.08);
+    transform: scaleY(1.006) translateX(0);
+  }
+  100% {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+@keyframes crtScanDrift {
+  0% {
+    background-position:
+      0 0,
+      0 0;
+  }
+  50% {
+    background-position:
+      0 6px,
+      1px 0;
+  }
+  100% {
+    background-position:
+      0 0,
+      0 0;
   }
 }
 
