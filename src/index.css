@@ -474,9 +474,22 @@ body::after {
     transform: none;
   }
   .crt-power-on {
-    display: none;
+    display: block;
+    animation: crtPowerShell 1.25s ease-out forwards !important;
+  }
+  .crt-power-on::before {
+    animation: crtPowerScan 1.25s ease-out forwards !important;
+  }
+  .crt-power-on::after {
+    animation: crtPowerVignette 1.25s ease-out forwards !important;
+  }
+  .crt-power-line {
+    animation: crtPowerLine 0.9s ease-out forwards !important;
+  }
+  .crt-power-glow {
+    animation: crtPowerBloom 1.15s ease-out forwards !important;
   }
   .crt-boot-content {
-    animation: none;
+    animation: crtBootContent 1.25s ease-out both !important;
   }
 }
