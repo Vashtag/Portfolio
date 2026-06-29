@@ -19,6 +19,11 @@ type Sample = {
   light: number
 }
 
+type SidePoint = {
+  y: number
+  z: number
+}
+
 function clamp01(value: number) {
   return THREE.MathUtils.clamp(value, 0, 1)
 }
@@ -85,6 +90,29 @@ function cortexSample(hemi: number, latT: number, lonT: number): Sample {
   }
 }
 
+function sideCortexSample(hemi: number, side: SidePoint, lift = 0): Sample {
+  const y = side.y
+  const z = side.z
+  const oval =
+    Math.pow((z - 0.02) / 1.18, 2) +
+    Math.pow((y + 0.01 + 0.08 * Math.max(0, -z)) / 0.78, 2)
+  const lateral = Math.sqrt(Math.max(0.08, 1 - oval * 0.62))
+  const temporalShelf = gaussian(y + 0.42, 0.04) * gaussian(z + 0.04, 0.5)
+  const fold = corticalFoldField(hemi * lateral, y, z, hemi)
+  const groove = grooveMask(hemi * lateral, y, z, hemi)
+
+  const point = new THREE.Vector3(
+    hemi * (0.7 + 0.2 * lateral + temporalShelf * 0.08 + lift),
+    y + fold * 0.012 - groove * 0.018,
+    z + fold * 0.015,
+  )
+
+  return {
+    point,
+    light: clamp01(0.68 + fold * 0.16 - groove * 0.18 + lift * 0.8),
+  }
+}
+
 function ellipsoidSample(
   latT: number,
   lonT: number,
@@ -133,6 +161,35 @@ function useBrainWireGeometry() {
       pushVertex(b)
     }
 
+    const pushSideCurve = (hemi: number, points: SidePoint[], light = 0.88, lift = 0.026) => {
+      for (let i = 0; i < points.length - 1; i++) {
+        const a = sideCortexSample(hemi, points[i], lift)
+        const b = sideCortexSample(hemi, points[i + 1], lift)
+        pushSegment({ ...a, light }, { ...b, light })
+      }
+    }
+
+    const pushSideLoop = (
+      hemi: number,
+      center: SidePoint,
+      radiusY: number,
+      radiusZ: number,
+      phase: number,
+      light = 0.82,
+    ) => {
+      const steps = 46
+      const points: SidePoint[] = []
+      for (let i = 0; i <= steps; i++) {
+        const t = (i / steps) * Math.PI * 2
+        const wobble = 1 + 0.16 * Math.sin(3 * t + phase) + 0.08 * Math.sin(5 * t - phase)
+        points.push({
+          y: center.y + Math.sin(t) * radiusY * wobble,
+          z: center.z + Math.cos(t) * radiusZ * (1 + 0.1 * Math.sin(2 * t + phase)),
+        })
+      }
+      pushSideCurve(hemi, points, light, 0.034)
+    }
+
     const cortexRings = 44
     const cortexSegments = 66
     for (const hemi of [-1, 1]) {
@@ -153,6 +210,63 @@ function useBrainWireGeometry() {
           )
         }
       }
+
+      pushSideCurve(hemi, [
+        { y: -0.1, z: 0.75 },
+        { y: -0.16, z: 0.52 },
+        { y: -0.2, z: 0.28 },
+        { y: -0.24, z: 0.02 },
+        { y: -0.26, z: -0.28 },
+        { y: -0.2, z: -0.55 },
+      ], 0.96, 0.045)
+      pushSideCurve(hemi, [
+        { y: 0.64, z: 0.08 },
+        { y: 0.46, z: 0.0 },
+        { y: 0.25, z: -0.05 },
+        { y: 0.03, z: -0.04 },
+        { y: -0.16, z: 0.02 },
+      ], 0.93, 0.044)
+      pushSideCurve(hemi, [
+        { y: 0.43, z: 0.62 },
+        { y: 0.48, z: 0.35 },
+        { y: 0.46, z: 0.05 },
+        { y: 0.38, z: -0.28 },
+        { y: 0.27, z: -0.58 },
+      ], 0.82, 0.032)
+      pushSideCurve(hemi, [
+        { y: 0.19, z: 0.5 },
+        { y: 0.22, z: 0.24 },
+        { y: 0.18, z: -0.04 },
+        { y: 0.13, z: -0.32 },
+        { y: 0.04, z: -0.58 },
+      ], 0.8, 0.03)
+      pushSideCurve(hemi, [
+        { y: -0.36, z: 0.48 },
+        { y: -0.4, z: 0.2 },
+        { y: -0.42, z: -0.08 },
+        { y: -0.38, z: -0.38 },
+      ], 0.85, 0.038)
+      pushSideCurve(hemi, [
+        { y: -0.5, z: 0.35 },
+        { y: -0.54, z: 0.06 },
+        { y: -0.52, z: -0.22 },
+        { y: -0.45, z: -0.5 },
+      ], 0.76, 0.026)
+
+      const loops = [
+        { center: { y: 0.3, z: 0.62 }, ry: 0.16, rz: 0.18, phase: 0.2 },
+        { center: { y: 0.1, z: 0.56 }, ry: 0.13, rz: 0.16, phase: 1.3 },
+        { center: { y: 0.5, z: 0.24 }, ry: 0.13, rz: 0.18, phase: 2.0 },
+        { center: { y: 0.28, z: 0.14 }, ry: 0.12, rz: 0.15, phase: 2.8 },
+        { center: { y: 0.5, z: -0.22 }, ry: 0.12, rz: 0.17, phase: 0.7 },
+        { center: { y: 0.24, z: -0.38 }, ry: 0.13, rz: 0.19, phase: 1.8 },
+        { center: { y: -0.06, z: -0.54 }, ry: 0.14, rz: 0.18, phase: 2.6 },
+        { center: { y: -0.38, z: 0.12 }, ry: 0.1, rz: 0.2, phase: 3.1 },
+        { center: { y: -0.36, z: -0.28 }, ry: 0.1, rz: 0.17, phase: 0.9 },
+      ]
+      loops.forEach((loop, i) => {
+        pushSideLoop(hemi, loop.center, loop.ry, loop.rz, loop.phase + hemi * 0.4, 0.76 + (i % 3) * 0.04)
+      })
     }
 
     const cerebellumCenter = new THREE.Vector3(0, -0.58, -0.72)
@@ -173,6 +287,25 @@ function useBrainWireGeometry() {
           ellipsoidSample(r / cerebellumRings, s / cerebellumSegments, cerebellumCenter, cerebellumScale, 0.8),
           ellipsoidSample((r + 1) / cerebellumRings, s / cerebellumSegments, cerebellumCenter, cerebellumScale, 0.8),
         )
+      }
+    }
+    for (let band = 0; band < 8; band++) {
+      const y = -0.7 + band * 0.035
+      const points: Sample[] = []
+      for (let s = 0; s <= 52; s++) {
+        const t = (s / 52) * Math.PI * 2
+        const ripple = 1 + 0.05 * Math.sin(8 * t + band)
+        points.push({
+          point: new THREE.Vector3(
+            Math.cos(t) * cerebellumScale.x * ripple,
+            y + 0.015 * Math.sin(3 * t + band),
+            cerebellumCenter.z + Math.sin(t) * cerebellumScale.z * 0.82,
+          ),
+          light: 0.72,
+        })
+      }
+      for (let i = 0; i < points.length - 1; i++) {
+        pushSegment(points[i], points[i + 1])
       }
     }
 
