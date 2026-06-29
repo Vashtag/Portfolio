@@ -7,14 +7,16 @@ import Projects from './components/Projects'
 import Footer from './components/Footer'
 
 export default function App() {
+  const bootKey = Date.now()
+
   return (
     <>
-      <div className="crt-power-on" aria-hidden="true">
+      <div key={bootKey} className="crt-power-on" aria-hidden="true">
         <div className="crt-power-line" />
         <div className="crt-power-glow" />
       </div>
 
-      <div className="crt-boot-content">
+      <div key={`content-${bootKey}`} className="crt-boot-content">
         <TopBar />
         <SideNav />
 
