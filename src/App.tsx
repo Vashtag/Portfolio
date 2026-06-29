@@ -9,17 +9,24 @@ import Footer from './components/Footer'
 export default function App() {
   return (
     <>
-      <TopBar />
-      <SideNav />
+      <div className="crt-power-on" aria-hidden="true">
+        <div className="crt-power-line" />
+        <div className="crt-power-glow" />
+      </div>
 
-      <div className="lg:ml-64">
-        <main className="pt-24 min-h-screen">
-          <Hero />
-          <Bio />
-          <Research />
-          <Projects />
-        </main>
-        <Footer />
+      <div className="crt-boot-content">
+        <TopBar />
+        <SideNav />
+
+        <div className="lg:ml-64">
+          <main className="pt-24 min-h-screen">
+            <Hero />
+            <Bio />
+            <Research />
+            <Projects />
+          </main>
+          <Footer />
+        </div>
       </div>
     </>
   )
