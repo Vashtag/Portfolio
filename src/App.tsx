@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import TopBar from './components/TopBar'
 import SideNav from './components/SideNav'
 import Hero from './components/Hero'
@@ -8,7 +8,12 @@ import Projects from './components/Projects'
 import Footer from './components/Footer'
 
 export default function App() {
-  const bootKey = Date.now()
+  // Computed once on mount (NOT on every render). Using `Date.now()` inline
+  // would produce a new key on every re-render, remounting the whole tree and
+  // restarting the fullscreen CRT power-on overlay — which leaves the overlay
+  // up and the content stuck invisible (a blank/white screen). A stable key
+  // plays the boot animation exactly once per page load.
+  const [bootKey] = useState(() => Date.now())
 
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
