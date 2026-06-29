@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import Brain from './brain/Brain'
 import { profile } from '../content'
-import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 
-// Types out the hero name letter-by-letter (or shows it immediately when the
-// user prefers reduced motion).
+// Types out the hero name letter-by-letter.
 function useTypewriter(text: string, enabled: boolean) {
   const [out, setOut] = useState(enabled ? '' : text)
 
@@ -27,8 +25,7 @@ function useTypewriter(text: string, enabled: boolean) {
 }
 
 export default function Hero() {
-  const prefersReducedMotion = usePrefersReducedMotion()
-  const typed = useTypewriter(profile.heroTyped, !prefersReducedMotion)
+  const typed = useTypewriter(profile.heroTyped, true)
   const brainRef = useRef<HTMLDivElement>(null)
 
   return (
