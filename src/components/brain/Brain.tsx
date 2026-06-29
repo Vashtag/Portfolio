@@ -38,7 +38,7 @@ export default function Brain() {
   const prefersReducedMotion = usePrefersReducedMotion()
   const [webgl, setWebgl] = useState(true)
   const fallback = (
-    <div className="w-full h-full min-h-64">
+    <div className="absolute inset-0">
       <BrainFallback pulse={!prefersReducedMotion} />
     </div>
   )
@@ -52,18 +52,15 @@ export default function Brain() {
     return fallback
   }
 
+  // The 3D wireframe brain is the prominent layer. The static SVG is used only
+  // while the 3D chunk loads or if WebGL throws — not as a permanent underlay.
+  // The R3F <Canvas> is rendered as a direct child of the definite-height
+  // aspect-square wrapper (no intermediate div) so it measures a real size.
   return (
-    <div className="relative w-full h-full min-h-64">
-      <div className="absolute inset-0 opacity-35">
-        <BrainFallback pulse={false} />
-      </div>
-      <div className="relative w-full h-full min-h-64">
-        <BrainErrorBoundary fallback={fallback}>
-          <Suspense fallback={fallback}>
-            <BrainScene animate={!prefersReducedMotion} />
-          </Suspense>
-        </BrainErrorBoundary>
-      </div>
-    </div>
+    <BrainErrorBoundary fallback={fallback}>
+      <Suspense fallback={fallback}>
+        <BrainScene animate={!prefersReducedMotion} />
+      </Suspense>
+    </BrainErrorBoundary>
   )
 }

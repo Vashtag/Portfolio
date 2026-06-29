@@ -36,7 +36,7 @@ export default function Hero() {
       <div
         ref={brainRef}
         role="img"
-        aria-label="Interactive 3D point-cloud brain"
+        aria-label="Interactive 3D wireframe brain"
         className="relative w-full max-w-2xl aspect-square flex items-center justify-center"
       >
         <Brain />
