@@ -1,10 +1,10 @@
 // Static SVG brain shown when WebGL is unavailable or while the 3D scene loads.
-// Stylised phosphor-green wireframe brain — lightweight and dependency-free.
+// Stylised phosphor-green wireframe brain -- lightweight and dependency-free.
 export default function BrainFallback({ pulse = false }: { pulse?: boolean }) {
   return (
     <svg
       viewBox="0 0 200 200"
-      className={`w-full h-full text-primary-fixed-dim drop-shadow-[0_0_25px_rgba(0,255,65,0.4)] ${
+      className={`w-full h-full min-h-64 text-[#5dff8a] opacity-90 drop-shadow-[0_0_28px_rgba(93,255,138,0.55)] ${
         pulse ? 'animate-pulse' : ''
       }`}
       fill="none"
