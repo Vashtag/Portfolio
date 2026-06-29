@@ -3,75 +3,109 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Brain geometry
 //
-// We don't load an external 3D model — instead we deform an icosphere into a
-// brain-like, wrinkled blob procedurally. This keeps the bundle small, removes
-// any asset dependency, and still reads clearly as a "brain" once it rotates.
-// ─────────────────────────────────────────────────────────────────────────────
+// The hero brain stays procedural to avoid shipping a model asset, but the point
+// cloud is shaped as two separate hemispheres rather than a single blob. The
+// sampled surface includes a sagittal fissure, front/back asymmetry, temporal
+// lobe bulges, and darker sulcal groove bands so it reads more like cortex.
 
-// Multi-octave product-of-sines "fold" field. Products of sines vanish along
-// planes, producing ridge/valley patterns reminiscent of cortical gyri.
-function foldField(x: number, y: number, z: number): number {
+const DIM_GREEN = new THREE.Color('#0a8f2a')
+const MID_GREEN = new THREE.Color('#18d957')
+const BRIGHT_GREEN = new THREE.Color('#7dff9f')
+
+function clamp01(value: number) {
+  return THREE.MathUtils.clamp(value, 0, 1)
+}
+
+function gaussian(value: number, width: number) {
+  return Math.exp(-(value * value) / width)
+}
+
+function corticalFoldField(x: number, y: number, z: number, hemi: number): number {
   return (
-    0.5 * Math.sin(3.1 * x) * Math.sin(3.7 * y) * Math.sin(3.3 * z) +
-    0.25 * Math.sin(6.3 * x + 1.2) * Math.sin(5.9 * y + 0.7) * Math.sin(6.7 * z + 2.1) +
-    0.12 * Math.sin(11.0 * x) * Math.sin(12.0 * y) * Math.sin(10.0 * z)
+    0.38 * Math.sin(10.5 * z + 4.2 * y + hemi * 0.7) +
+    0.3 * Math.sin(13.0 * y - 3.6 * x + hemi * 1.4) +
+    0.22 * Math.sin(17.5 * (z + x * 0.3) + 1.6) +
+    0.16 * Math.sin(24.0 * (y - z * 0.18) + hemi * 0.9)
   )
 }
 
-const DIM_GREEN = new THREE.Color('#0a8f2a')
-const BRIGHT_GREEN = new THREE.Color('#5dff8a')
+function grooveMask(x: number, y: number, z: number, hemi: number): number {
+  const lateralSulcus = gaussian(y + 0.18 + z * 0.08, 0.006) * gaussian(Math.abs(x) - 0.62, 0.09)
+  const centralSulcus = gaussian(z - 0.08 + hemi * x * 0.08, 0.008) * clamp01((y + 0.1) / 0.9)
+  const parietoOccipital = gaussian(z + 0.46 - y * 0.2, 0.01) * clamp01((y + 0.15) / 0.8)
+  const frontalCurves = gaussian(z - 0.55, 0.09) * (0.5 + 0.5 * Math.sin(18 * y + hemi * 2.2))
+
+  return clamp01(lateralSulcus * 0.85 + centralSulcus * 0.7 + parietoOccipital * 0.55 + frontalCurves * 0.25)
+}
 
 function useBrainGeometry() {
   return useMemo(() => {
-    // Dense icosphere as the source of evenly distributed points.
-    const source = new THREE.IcosahedronGeometry(1, 24)
-    const srcPos = source.getAttribute('position') as THREE.BufferAttribute
-
-    const count = srcPos.count
+    const rings = 86
+    const segments = 132
+    const count = 2 * (rings + 1) * (segments + 1)
     const positions = new Float32Array(count * 3)
     const colors = new Float32Array(count * 3)
-
-    const dir = new THREE.Vector3()
     const tmpColor = new THREE.Color()
+    let index = 0
 
-    for (let i = 0; i < count; i++) {
-      dir.set(srcPos.getX(i), srcPos.getY(i), srcPos.getZ(i)).normalize()
+    for (const hemi of [-1, 1]) {
+      for (let r = 0; r <= rings; r++) {
+        const lat = -Math.PI / 2 + (r / rings) * Math.PI
+        const y0 = Math.sin(lat)
+        const latitudeRadius = Math.cos(lat)
 
-      // Base ellipsoid: longer front-to-back (z), slightly flatter top (y).
-      const ex = dir.x * 0.95
-      const ey = dir.y * 0.9
-      const ez = dir.z * 1.18
+        for (let s = 0; s <= segments; s++) {
+          const lon = -Math.PI / 2 + (s / segments) * Math.PI
+          const lateral = Math.cos(lon)
+          const z0 = Math.sin(lon) * latitudeRadius
+          const x0 = hemi * lateral * latitudeRadius
 
-      // Cortical wrinkles displaced along the surface direction.
-      const fold = foldField(dir.x * 1.0, dir.y * 1.0, dir.z * 1.0)
-      let radius = 1 + fold * 0.09
+          const top = clamp01((y0 + 1) / 2)
+          const bottom = 1 - top
+          const front = clamp01(z0)
+          const back = clamp01(-z0)
 
-      // Central sagittal fissure: a groove splitting the two hemispheres,
-      // strongest along the top (y > 0) midline (x ≈ 0).
-      const midline = Math.exp(-(dir.x * dir.x) / 0.01)
-      const topMask = Math.max(0, dir.y)
-      radius -= 0.12 * midline * topMask
+          const frontRoundness = 1 + 0.08 * front
+          const backTaper = 1 - 0.1 * back * back
+          const temporalBulge = gaussian(y0 + 0.33, 0.075) * gaussian(z0 + 0.08, 0.8) * lateral
+          const occipitalLift = gaussian(z0 + 0.62, 0.18) * gaussian(y0 + 0.03, 0.4)
 
-      positions[i * 3] = ex * radius
-      positions[i * 3 + 1] = ey * radius
-      positions[i * 3 + 2] = ez * radius
+          let x = hemi * (0.065 + Math.abs(x0) * 0.9 * frontRoundness * backTaper)
+          let y = y0 * 0.76 - temporalBulge * 0.1 + occipitalLift * 0.04
+          let z = z0 * 1.15 * (1 + 0.04 * front - 0.05 * back)
 
-      // Brighter green on the ridges to emphasise the folds.
-      const t = THREE.MathUtils.clamp(fold * 0.5 + 0.5, 0, 1)
-      tmpColor.copy(DIM_GREEN).lerp(BRIGHT_GREEN, t)
-      colors[i * 3] = tmpColor.r
-      colors[i * 3 + 1] = tmpColor.g
-      colors[i * 3 + 2] = tmpColor.b
+          x += hemi * temporalBulge * 0.16
+          y += bottom * 0.03 * Math.sin(hemi * 2.4 + z0 * 3.2)
+
+          const fold = corticalFoldField(x, y, z, hemi)
+          const groove = grooveMask(x, y, z, hemi)
+          const displacement = 1 + fold * 0.03 - groove * 0.055
+
+          x *= displacement
+          y *= displacement
+          z *= displacement
+
+          positions[index * 3] = x
+          positions[index * 3 + 1] = y
+          positions[index * 3 + 2] = z
+
+          const ridgeLight = clamp01(0.46 + fold * 0.24 - groove * 0.42 + top * 0.12)
+          tmpColor.copy(DIM_GREEN).lerp(MID_GREEN, ridgeLight).lerp(BRIGHT_GREEN, clamp01(ridgeLight - 0.55))
+          colors[index * 3] = tmpColor.r
+          colors[index * 3 + 1] = tmpColor.g
+          colors[index * 3 + 2] = tmpColor.b
+
+          index++
+        }
+      }
     }
-
-    source.dispose()
 
     const geometry = new THREE.BufferGeometry()
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+    geometry.computeBoundingSphere()
     return geometry
   }, [])
 }
@@ -100,18 +134,21 @@ function BrainPoints({ animate }: { animate: boolean }) {
   const geometry = useBrainGeometry()
   const glow = useGlowTexture()
 
-  // A faint, slow "breathing" pulse on the whole brain.
-  useFrame((state) => {
-    if (!ref.current || !animate) return
-    const t = state.clock.elapsedTime
-    const pulse = 1 + Math.sin(t * 0.8) * 0.012
-    ref.current.scale.setScalar(pulse)
+  useFrame((state, delta) => {
+    if (!ref.current) return
+
+    if (animate) {
+      ref.current.rotation.y += delta * 0.32
+      ref.current.rotation.x = 0.08 + Math.sin(state.clock.elapsedTime * 0.35) * 0.035
+      const pulse = 1 + Math.sin(state.clock.elapsedTime * 0.8) * 0.01
+      ref.current.scale.setScalar(pulse)
+    }
   })
 
   return (
-    <points ref={ref} geometry={geometry}>
+    <points ref={ref} geometry={geometry} rotation={[0.08, -0.45, 0]}>
       <pointsMaterial
-        size={0.022}
+        size={0.019}
         map={glow}
         vertexColors
         transparent
@@ -124,9 +161,9 @@ function BrainPoints({ animate }: { animate: boolean }) {
 }
 
 // Drag-to-orbit controls using three.js's built-in OrbitControls (no extra
-// dependency). Zoom/pan disabled so the brain stays centered; auto-rotates
-// unless reduced motion is requested.
-function Controls({ animate }: { animate: boolean }) {
+// dependency). Zoom/pan disabled so the brain stays centered; the object itself
+// rotates so the motion is visible even when the user never interacts.
+function Controls() {
   const camera = useThree((s) => s.camera)
   const gl = useThree((s) => s.gl)
 
@@ -138,10 +175,9 @@ function Controls({ animate }: { animate: boolean }) {
     controls.enableDamping = true
     controls.dampingFactor = 0.08
     controls.rotateSpeed = 0.5
-    controls.autoRotate = animate
-    controls.autoRotateSpeed = 0.6
+    controls.autoRotate = false
     return () => controls.dispose()
-  }, [controls, animate])
+  }, [controls])
 
   useFrame(() => controls.update())
   return null
@@ -150,14 +186,14 @@ function Controls({ animate }: { animate: boolean }) {
 export default function BrainScene({ animate }: { animate: boolean }) {
   return (
     <Canvas
-      camera={{ position: [0, 0, 3.3], fov: 50 }}
+      camera={{ position: [0, 0, 3.35], fov: 48 }}
       dpr={[1, 2]}
       gl={{ antialias: true, alpha: true }}
     >
-      <group rotation={[0.15, 0, 0]}>
+      <group rotation={[0.12, 0, 0]}>
         <BrainPoints animate={animate} />
       </group>
-      <Controls animate={animate} />
+      <Controls />
     </Canvas>
   )
 }
