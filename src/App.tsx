@@ -1,7 +1,8 @@
+import Hero from './components/Hero'
 import { profile } from './content'
 
-// NOTE: This is the Step 1 scaffold shell. The 3D brain hero and full content
-// sections are added in the following build steps.
+// Step 2: top bar + hero with the interactive 3D brain.
+// Remaining content sections are added in Step 3.
 export default function App() {
   return (
     <>
@@ -11,21 +12,13 @@ export default function App() {
             {profile.osName}
           </div>
           <span className="font-label-caps text-label-caps text-on-surface-variant">
-            BOOTING…
+            SYSTEM_ONLINE
           </span>
         </nav>
       </header>
 
-      <main className="pt-24 min-h-screen flex flex-col items-center justify-center text-center px-margin-mobile">
-        <div className="w-64 h-64 border border-outline-variant flex items-center justify-center text-on-surface-variant font-code-sm">
-          [ BRAIN_CORE :: PENDING ]
-        </div>
-        <h1 className="mt-8 font-headline-lg-mobile md:font-headline-lg text-primary-fixed-dim crt-glow uppercase tracking-widest terminal-cursor">
-          {profile.fullName}
-        </h1>
-        <p className="mt-4 font-label-caps text-label-caps text-on-surface-variant tracking-widest opacity-80">
-          {profile.heroSubtitle}
-        </p>
+      <main className="pt-24 min-h-screen">
+        <Hero />
       </main>
     </>
   )
