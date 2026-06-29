@@ -37,7 +37,11 @@ class BrainErrorBoundary extends Component<
 export default function Brain() {
   const prefersReducedMotion = usePrefersReducedMotion()
   const [webgl, setWebgl] = useState(true)
-  const fallback = <BrainFallback pulse={!prefersReducedMotion} />
+  const fallback = (
+    <div className="w-full h-full min-h-64">
+      <BrainFallback pulse={!prefersReducedMotion} />
+    </div>
+  )
 
   // Detect WebGL on the client after mount (avoids SSR/hydration mismatch).
   useEffect(() => {
@@ -49,10 +53,17 @@ export default function Brain() {
   }
 
   return (
-    <BrainErrorBoundary fallback={fallback}>
-      <Suspense fallback={fallback}>
-        <BrainScene animate={!prefersReducedMotion} />
-      </Suspense>
-    </BrainErrorBoundary>
+    <div className="relative w-full h-full min-h-64">
+      <div className="absolute inset-0 opacity-35">
+        <BrainFallback pulse={false} />
+      </div>
+      <div className="relative w-full h-full min-h-64">
+        <BrainErrorBoundary fallback={fallback}>
+          <Suspense fallback={fallback}>
+            <BrainScene animate={!prefersReducedMotion} />
+          </Suspense>
+        </BrainErrorBoundary>
+      </div>
+    </div>
   )
 }
