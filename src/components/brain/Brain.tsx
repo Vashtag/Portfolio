@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { Component, lazy, Suspense, useEffect, useState, type ReactNode } from 'react'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import { isWebGLAvailable } from '../../lib/webgl'
 import BrainFallback from './BrainFallback'
@@ -7,17 +7,37 @@ import BrainFallback from './BrainFallback'
 // out of the initial page payload.
 const BrainScene = lazy(() => import('./BrainScene'))
 
+class BrainErrorBoundary extends Component<
+  { children: ReactNode; fallback: ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback
+    }
+
+    return this.props.children
+  }
+}
+
 /**
  * The hero brain centerpiece.
  *
- * - Renders the interactive 3D point-cloud brain when WebGL is available.
- * - Falls back to a static SVG brain when WebGL is missing (and as the
- *   Suspense placeholder while the 3D chunk loads).
+ * - Renders the interactive 3D wireframe brain when WebGL is available.
+ * - Falls back to a static SVG brain when WebGL is missing, while the 3D chunk
+ *   loads, or if a browser/GPU-specific WebGL error occurs.
  * - Auto-rotation / pulsing is disabled when the user prefers reduced motion.
  */
 export default function Brain() {
   const prefersReducedMotion = usePrefersReducedMotion()
   const [webgl, setWebgl] = useState(true)
+  const fallback = <BrainFallback pulse={!prefersReducedMotion} />
 
   // Detect WebGL on the client after mount (avoids SSR/hydration mismatch).
   useEffect(() => {
@@ -25,12 +45,14 @@ export default function Brain() {
   }, [])
 
   if (!webgl) {
-    return <BrainFallback pulse={!prefersReducedMotion} />
+    return fallback
   }
 
   return (
-    <Suspense fallback={<BrainFallback pulse={!prefersReducedMotion} />}>
-      <BrainScene animate={!prefersReducedMotion} />
-    </Suspense>
+    <BrainErrorBoundary fallback={fallback}>
+      <Suspense fallback={fallback}>
+        <BrainScene animate={!prefersReducedMotion} />
+      </Suspense>
+    </BrainErrorBoundary>
   )
 }
