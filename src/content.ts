@@ -17,7 +17,7 @@ export const profile = {
 
 export const links = {
   github: 'https://github.com/vashtag',
-  linkedin: 'https://www.linkedin.com/',
+  linkedin: 'https://www.linkedin.com/in/siyavash-izadi/',
   email: 'siyavash.izadi@gmail.com',
 }
 

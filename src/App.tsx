@@ -150,19 +150,20 @@ export default function App() {
             borderBottom: '1px solid rgba(77,255,160,.22)',
             background: 'linear-gradient(180deg,rgba(77,255,160,.07),transparent)',
           })}>
-            <button
-              onClick={() => flip('about')}
-              style={v({ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10, fontFamily: "'VT323',monospace", fontSize: 22, letterSpacing: 1, color: 'var(--accent)', background: 'none', border: 'none', padding: 0 })}
-            >
+            <div style={v({ display: 'flex', alignItems: 'center', gap: 10, fontFamily: "'VT323',monospace", fontSize: 22, letterSpacing: 1, color: 'var(--accent)' })}>
               <span style={{ width: 9, height: 9, borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 10px var(--accent)', display: 'inline-block', animation: 'blink 1.6s steps(1) infinite' }} />
               NEURO.SYS
+            </div>
+            <div style={v({ display: 'flex', alignItems: 'center', gap: 16 })}>
+              <div style={v({ fontFamily: "'VT323',monospace", fontSize: 20, color: 'rgba(140,255,195,.75)' })}>{clock}</div>
+              <div style={v({ fontFamily: "'VT323',monospace", fontSize: 23, letterSpacing: 2, color: '#bfffd9', textShadow: '0 0 8px var(--accent)' })}>{chLabel(current)}</div>
+            </div>
+            <button
+              onClick={() => flip('about')}
+              style={v({ cursor: 'pointer', fontFamily: "'VT323',monospace", fontSize: 20, letterSpacing: 2, color: current === 'about' ? 'var(--accent)' : 'rgba(140,255,195,.7)', background: 'none', border: `1px solid ${current === 'about' ? 'var(--accent)' : 'rgba(77,255,160,.3)'}`, borderRadius: 4, padding: '2px 12px', textShadow: current === 'about' ? '0 0 10px var(--accent)' : 'none', transition: 'all .15s' })}
+            >
+              HOME
             </button>
-            <div style={v({ fontFamily: "'VT323',monospace", fontSize: 23, letterSpacing: 2, color: '#bfffd9', textShadow: '0 0 8px var(--accent)' })}>
-              {chLabel(current)}
-            </div>
-            <div style={v({ fontFamily: "'VT323',monospace", fontSize: 20, color: 'rgba(140,255,195,.75)' })}>
-              {clock}
-            </div>
           </div>
 
           {/* ── NAV TABS ─────────────────────────────────────────────────── */}

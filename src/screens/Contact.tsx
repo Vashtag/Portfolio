@@ -13,10 +13,9 @@ const h1Style: CSSProperties = {
 }
 
 const contactItems = [
-  { label: '▸ EMAIL', value: 'siyavash.izadi@gmail.com', href: `mailto:siyavash.izadi@gmail.com` },
+  { label: '▸ EMAIL', value: 'sizadiso@uwaterloo.ca', href: 'mailto:sizadiso@uwaterloo.ca' },
   { label: '▸ GITHUB', value: 'github.com/vashtag', href: links.github },
-  { label: '▸ SCHOLAR', value: 'Google Scholar profile', href: 'https://scholar.google.com/' },
-  { label: '▸ LINKEDIN', value: 'linkedin.com/in/[handle]', href: links.linkedin },
+  { label: '▸ LINKEDIN', value: 'linkedin.com/in/siyavash-izadi', href: links.linkedin },
 ]
 
 export default function Contact({ visible }: { visible: boolean }) {
@@ -82,9 +81,6 @@ export default function Contact({ visible }: { visible: boolean }) {
         ⬇ DOWNLOAD CV.PDF
       </a>
 
-      <div style={{ marginTop: 18, fontFamily: "'VT323',monospace", fontSize: 18, color: 'rgba(125,255,176,.45)' }}>
-        &gt; swap in your real handles &amp; drop cv.pdf in the public/ folder — blink_
-      </div>
     </section>
   )
 }
