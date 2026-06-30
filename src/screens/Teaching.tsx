@@ -45,9 +45,7 @@ export default function Teaching({ visible }: { visible: boolean }) {
         ))}
       </div>
 
-      <div style={{ marginTop: 16, fontFamily: "'VT323',monospace", fontSize: 18, color: 'rgba(125,255,176,.45)' }}>
-        &gt; swap in your real course codes &amp; titles — blink_
-      </div>
+
     </section>
   )
 }
