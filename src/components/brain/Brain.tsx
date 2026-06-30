@@ -5,45 +5,64 @@ type Node = Point & { phase: number; fire: number }
 type Pulse = { a: number; b: number; t: number }
 type Segment = ['M', number, number] | ['C', number, number, number, number, number, number] | ['Z']
 
+// Lateral (left-hemisphere) view. Coordinate space 96 × 90, centred at (48, 44).
+// Frontal pole is lower-left; occipital pole is right; temporal lobe hangs below.
 const CEREBRUM: Segment[] = [
-  ['M', 10, 44],
-  ['C', 8, 30, 17, 18, 30, 15],
-  ['C', 42, 11, 55, 11, 66, 15],
-  ['C', 76, 19, 85, 27, 86, 36],
-  ['C', 87, 41, 84, 46, 77, 46],
-  ['C', 70, 46, 64, 45, 60, 47],
-  ['C', 52, 53, 42, 56, 32, 55],
-  ['C', 22, 54, 13, 52, 11, 48],
-  ['C', 10, 47, 10, 45, 10, 44],
+  ['M', 14, 54],
+  ['C', 7, 44, 6, 28, 12, 17],   // frontal, rising
+  ['C', 17, 6, 28, 3, 41, 3],    // frontal superior
+  ['C', 53, 3, 64, 7, 72, 13],   // parietal superior
+  ['C', 80, 19, 85, 29, 85, 41], // occipital slope
+  ['C', 85, 52, 80, 58, 73, 61], // posterior
+  ['C', 65, 64, 55, 65, 49, 67], // temporal-parietal junction
+  ['C', 38, 70, 25, 67, 19, 61], // temporal lobe
+  ['C', 16, 58, 14, 57, 14, 54], // back to frontal pole
   ['Z'],
 ]
 const CEREBELLUM: Segment[] = [
-  ['M', 61, 47],
-  ['C', 67, 47, 75, 49, 79, 54],
-  ['C', 82, 57, 81, 62, 75, 64],
-  ['C', 68, 66, 60, 64, 57, 59],
-  ['C', 55, 55, 56, 49, 61, 47],
+  ['M', 64, 59],
+  ['C', 70, 56, 79, 58, 84, 63],
+  ['C', 88, 68, 87, 76, 80, 79],
+  ['C', 72, 81, 62, 77, 59, 71],
+  ['C', 57, 65, 58, 60, 64, 59],
   ['Z'],
 ]
 const STEM: Segment[] = [
-  ['M', 55, 56],
-  ['C', 54, 61, 54, 67, 56, 73],
-  ['C', 57, 76, 61, 76, 62, 72],
-  ['C', 63, 66, 62, 60, 61, 56],
+  ['M', 57, 68],
+  ['C', 56, 73, 56, 80, 58, 85],
+  ['C', 59, 88, 63, 88, 64, 84],
+  ['C', 65, 78, 64, 71, 63, 68],
 ]
+// Lateral sulcus (Sylvian fissure) — the major horizontal landmark
 const FISSURE: Segment[] = [
-  ['M', 16, 45],
-  ['C', 26, 47, 38, 46, 48, 41],
-  ['C', 54, 38, 59, 37, 64, 39],
+  ['M', 18, 52],
+  ['C', 30, 55, 45, 52, 55, 47],
+  ['C', 62, 43, 68, 42, 75, 44],
 ]
 const GYRI: Segment[][] = [
-  [['M', 13, 38], ['C', 22, 33, 30, 36, 37, 31], ['C', 44, 27, 52, 30, 58, 25], ['C', 64, 21, 72, 24, 79, 29]],
-  [['M', 14, 44], ['C', 24, 42, 31, 40, 39, 43], ['C', 47, 46, 53, 41, 61, 43], ['C', 67, 45, 73, 43, 82, 40]],
-  [['M', 20, 29], ['C', 27, 25, 33, 28, 41, 23], ['C', 49, 19, 55, 23, 63, 19]],
-  [['M', 23, 49], ['C', 31, 50, 37, 47, 45, 49], ['C', 51, 51, 59, 48, 67, 48]],
-  [['M', 31, 20], ['C', 37, 16, 45, 18, 52, 15]],
-  [['M', 16, 41], ['C', 20, 39, 25, 41, 29, 44]],
-  [['M', 44, 33], ['C', 50, 30, 56, 33, 61, 30]],
+  // Superior frontal gyrus (arcs across the top)
+  [['M', 15, 19], ['C', 25, 12, 38, 9, 50, 9], ['C', 61, 9, 71, 14, 77, 22]],
+  // Upper-middle frontal
+  [['M', 10, 29], ['C', 21, 23, 34, 21, 45, 22], ['C', 55, 23, 64, 20, 72, 26]],
+  // Middle frontal gyrus (main horizontal fold)
+  [['M', 9, 40], ['C', 19, 34, 31, 32, 43, 34], ['C', 53, 36, 60, 31, 67, 31], ['C', 75, 31, 81, 36, 83, 45]],
+  // Inferior frontal gyrus
+  [['M', 12, 47], ['C', 21, 43, 32, 42, 42, 44], ['C', 50, 46, 55, 43, 60, 43]],
+  // Central sulcus — vertical landmark between frontal and parietal
+  [['M', 53, 6], ['C', 56, 15, 58, 25, 59, 35], ['C', 60, 44, 59, 52, 58, 58]],
+  // Parietal — superior
+  [['M', 63, 9], ['C', 68, 18, 72, 29, 72, 40], ['C', 72, 48, 70, 55, 68, 59]],
+  // Parieto-occipital fold
+  [['M', 75, 17], ['C', 81, 26, 83, 37, 81, 47]],
+  // Superior temporal gyrus (just below Sylvian)
+  [['M', 20, 56], ['C', 33, 59, 47, 57, 58, 52], ['C', 66, 48, 73, 47, 77, 49]],
+  // Middle temporal gyrus
+  [['M', 26, 63], ['C', 38, 67, 51, 64, 61, 59], ['C', 68, 55, 73, 54, 76, 56]],
+  // Short inferior-frontal folds (branching pattern)
+  [['M', 15, 34], ['C', 22, 31, 27, 33, 30, 38]],
+  [['M', 16, 24], ['C', 22, 20, 27, 22, 31, 27]],
+  // Short postcentral
+  [['M', 61, 8], ['C', 64, 15, 65, 23, 66, 32]],
 ]
 
 function rgba(hex: string, alpha: number) {
@@ -176,8 +195,8 @@ export default function Brain() {
       height = Math.max(1, canvas.clientHeight * dpr)
       canvas.width = width
       canvas.height = height
-      scale = Math.min(width / 92, height / 74) * 0.95
-      ox = width / 2 - 47 * scale
+      scale = Math.min(width / 96, height / 90) * 0.90
+      ox = width / 2 - 48 * scale
       oy = height / 2 - 44 * scale
       seed()
     }
@@ -261,10 +280,10 @@ export default function Brain() {
       ctx.fillRect(0, 0, width, height)
       ctx.lineWidth = 1 * dpr
       ctx.strokeStyle = rgba(accent, 0.32)
-      for (let y = 48; y <= 63; y += 2) {
+      for (let y = 61; y <= 76; y += 2) {
         ctx.beginPath()
         for (let s = 0; s <= 12; s += 1) {
-          const x = 55 + ((81 - 55) * s) / 12
+          const x = 61 + ((82 - 61) * s) / 12
           const p = point(x, y + Math.sin(s * 0.85 + y) * 0.5)
           s === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)
         }
