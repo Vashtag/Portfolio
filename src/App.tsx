@@ -19,7 +19,7 @@ const ACCENTS: Record<Channel, string> = {
 }
 
 const TITLES: Record<Channel, string> = {
-  about: 'HOME', research: 'RESEARCH', projects: 'PROJECTS', teaching: 'TEACHING', contact: 'CONTACT',
+  about: 'ABOUT ME', research: 'RESEARCH', projects: 'PROJECTS', teaching: 'TEACHING', contact: 'CONTACT',
 }
 
 const BOOT_LINES = [
@@ -33,7 +33,7 @@ const BOOT_LINES = [
 ]
 
 function chLabel(ch: Channel) {
-  if (ch === 'about') return 'HOME'
+  if (ch === 'about') return 'ABOUT ME'
   return `CH ${String(TAB_ORDER.indexOf(ch) + 1).padStart(2, '0')} — ${TITLES[ch]}`
 }
 
@@ -162,7 +162,7 @@ export default function App() {
               onClick={() => flip('about')}
               style={v({ cursor: 'pointer', fontFamily: "'VT323',monospace", fontSize: 20, letterSpacing: 2, color: current === 'about' ? 'var(--accent)' : 'rgba(140,255,195,.7)', background: 'none', border: `1px solid ${current === 'about' ? 'var(--accent)' : 'rgba(77,255,160,.3)'}`, borderRadius: 4, padding: '2px 12px', textShadow: current === 'about' ? '0 0 10px var(--accent)' : 'none', transition: 'all .15s' })}
             >
-              HOME
+              ABOUT ME
             </button>
           </div>
 
@@ -196,7 +196,7 @@ export default function App() {
               </button>
             ))}
             <div style={v({ marginLeft: 'auto', fontFamily: "'VT323',monospace", fontSize: 18, letterSpacing: 1, color: 'rgba(125,255,176,.45)' })}>
-              ⌂ HOME · 1–4 · ◄ ►
+              ⌂ ABOUT ME · 1–4 · ◄ ►
             </div>
           </div>
 
