@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import EegPanel from '../components/brain/EegPanel'
 
 const h1Style: CSSProperties = {
   margin: '4px 0 0',
@@ -54,6 +55,12 @@ export default function Research({ visible }: { visible: boolean }) {
 
       <div style={{ marginTop: 16, fontFamily: "'VT323',monospace", fontSize: 18, color: 'rgba(125,255,176,.45)' }}>
         &gt; replace the placeholders with your real papers — blink_
+      </div>
+
+      {/* EEG panel */}
+      <div style={{ position: 'relative', marginTop: 24, height: 160, border: '1px solid rgba(95,224,255,.22)', borderRadius: 10, overflow: 'hidden', background: 'rgba(2,8,12,.5)', flexShrink: 0 }}>
+        <div style={{ position: 'absolute', top: 8, right: 12, zIndex: 2, fontFamily: "'VT323',monospace", fontSize: 18, letterSpacing: 1, color: 'rgba(95,224,255,.6)' }}>EEG.ARRAY — 4ch</div>
+        <EegPanel />
       </div>
     </section>
   )
