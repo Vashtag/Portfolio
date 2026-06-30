@@ -6,6 +6,7 @@ import Bio from './components/Bio'
 import Research from './components/Research'
 import Projects from './components/Projects'
 import Footer from './components/Footer'
+import CrtBootLog from './components/CrtBootLog'
 
 export default function App() {
   // Computed once on mount (NOT on every render). Using `Date.now()` inline
@@ -25,8 +26,7 @@ export default function App() {
   return (
     <>
       <div key={bootKey} className="crt-power-on" aria-hidden="true">
-        <div className="crt-power-line" />
-        <div className="crt-power-glow" />
+        <CrtBootLog />
       </div>
 
       <div key={`content-${bootKey}`} className="crt-boot-content">
