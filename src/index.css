@@ -44,12 +44,16 @@ body::after {
   position: fixed;
   inset: 0;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
   overflow: hidden;
   background:
-    radial-gradient(circle at center, rgba(129, 255, 157, 0.1), transparent 28%),
-    #010503;
-  animation: crtPowerShell 1.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    radial-gradient(circle at 20% 20%, rgba(77, 255, 160, 0.12), transparent 34%),
+    radial-gradient(circle at center, rgba(77, 255, 160, 0.08), transparent 46%),
+    #02080a;
+  animation: crtBootOverlay 3.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .crt-power-on::before,
@@ -62,52 +66,23 @@ body::after {
 
 .crt-power-on::before {
   background:
-    linear-gradient(rgba(255, 255, 255, 0.02) 50%, rgba(0, 0, 0, 0.35) 50%),
-    linear-gradient(90deg, rgba(255, 0, 72, 0.11), rgba(0, 255, 88, 0.04), rgba(0, 140, 255, 0.13));
+    linear-gradient(rgba(255, 255, 255, 0.035) 50%, rgba(0, 0, 0, 0.38) 50%),
+    linear-gradient(90deg, rgba(255, 0, 72, 0.1), rgba(0, 255, 88, 0.04), rgba(0, 140, 255, 0.12));
   background-size:
     100% 5px,
     4px 100%;
-  opacity: 0;
-  animation: crtPowerScan 1.9s ease-out forwards;
+  opacity: 0.62;
+  animation: crtBootScan 3.35s ease-out forwards;
 }
 
 .crt-power-on::after {
-  background: radial-gradient(ellipse at center, transparent 42%, rgba(0, 0, 0, 0.62) 100%);
-  opacity: 0.95;
-  animation: crtPowerVignette 1.9s ease-out forwards;
-}
-
-.crt-power-line {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  border-radius: 999px;
-  background: #d9ffe3;
-  box-shadow:
-    0 0 12px rgba(214, 255, 225, 0.95),
-    0 0 36px rgba(0, 230, 57, 0.85),
-    0 0 90px rgba(0, 230, 57, 0.55);
-  transform: translate(-50%, -50%);
-  animation: crtPowerLine 1.15s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
-.crt-power-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 130vw;
-  height: 130vh;
-  background: radial-gradient(ellipse at center, rgba(148, 255, 169, 0.34), rgba(0, 230, 57, 0.08) 24%, transparent 58%);
-  filter: blur(22px);
-  opacity: 0;
-  transform: translate(-50%, -50%) scaleY(0.012);
-  animation: crtPowerBloom 1.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  background: radial-gradient(ellipse at center, transparent 36%, rgba(0, 0, 0, 0.72) 100%);
+  opacity: 1;
+  animation: crtBootVignette 3.35s ease-out forwards;
 }
 
 .crt-boot-content {
-  animation: crtBootContent 1.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: crtBootSequenceContent 3.35s cubic-bezier(0.16, 1, 0.3, 1) both;
   transform-origin: 50% 50%;
 }
 
@@ -115,55 +90,19 @@ body::after {
   body::after {
     opacity: 0.4;
   }
-
-  .crt-power-on {
-    background:
-      radial-gradient(circle at center, rgba(166, 255, 184, 0.16), transparent 30%),
-      #000201;
-    animation-duration: 2.65s;
-  }
-
-  .crt-power-on::before,
-  .crt-power-on::after {
-    animation-duration: 2.65s;
-  }
-
-  .crt-power-line {
-    height: 3px;
-    box-shadow:
-      0 0 14px rgba(232, 255, 238, 1),
-      0 0 48px rgba(0, 230, 57, 0.95),
-      0 0 140px rgba(0, 230, 57, 0.72),
-      0 0 220px rgba(0, 230, 57, 0.34);
-    animation: crtPowerLineDesktop 1.75s cubic-bezier(0.18, 0.9, 0.18, 1) forwards;
-  }
-
-  .crt-power-glow {
-    width: 150vw;
-    height: 150vh;
-    filter: blur(28px);
-    animation: crtPowerBloomDesktop 2.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  .crt-boot-content {
-    animation: crtBootContentDesktop 2.65s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
 }
 
-@keyframes crtPowerShell {
+@keyframes crtBootOverlay {
   0%,
-  54% {
+  78% {
     opacity: 1;
     visibility: visible;
   }
-  62% {
-    opacity: 0.94;
+  86% {
+    opacity: 0.95;
   }
-  70% {
-    opacity: 1;
-  }
-  82% {
-    opacity: 0.24;
+  92% {
+    opacity: 0.36;
   }
   100% {
     opacity: 0;
@@ -171,144 +110,34 @@ body::after {
   }
 }
 
-@keyframes crtPowerLine {
-  0% {
-    width: 0;
-    opacity: 0;
-  }
-  14% {
-    width: 22vw;
-    opacity: 1;
-  }
-  34% {
-    width: 100vw;
-    height: 3px;
-    opacity: 1;
-  }
-  58% {
-    width: 112vw;
-    height: 22vh;
-    opacity: 0.76;
-  }
-  100% {
-    width: 120vw;
-    height: 120vh;
-    opacity: 0;
-  }
-}
-
-@keyframes crtPowerLineDesktop {
-  0% {
-    width: 0;
-    height: 1px;
-    opacity: 0;
-  }
-  12% {
-    width: 18vw;
-    opacity: 1;
-  }
-  26% {
-    width: 108vw;
-    height: 4px;
-    opacity: 1;
-  }
-  38% {
-    width: 116vw;
-    height: 7px;
-    opacity: 0.9;
-    transform: translate(-50%, -50%) translateX(-8px);
-  }
-  48% {
-    height: 2px;
-    opacity: 1;
-    transform: translate(-50%, -50%) translateX(6px);
-  }
-  64% {
-    width: 122vw;
-    height: 34vh;
-    opacity: 0.82;
-    transform: translate(-50%, -50%);
-  }
-  100% {
-    width: 130vw;
-    height: 130vh;
-    opacity: 0;
-  }
-}
-
-@keyframes crtPowerBloom {
+@keyframes crtBootScan {
   0%,
-  22% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scaleY(0.012);
-  }
-  44% {
-    opacity: 0.95;
-    transform: translate(-50%, -50%) scaleY(0.035);
-  }
-  66% {
-    opacity: 0.5;
-    transform: translate(-50%, -50%) scaleY(0.92);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scaleY(1);
-  }
-}
-
-@keyframes crtPowerBloomDesktop {
-  0%,
-  18% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scaleY(0.006) scaleX(0.92);
-  }
-  35% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scaleY(0.022) scaleX(1.04);
-  }
-  50% {
-    opacity: 0.72;
-    transform: translate(-50%, -50%) scaleY(0.08) scaleX(1.01);
-  }
   70% {
-    opacity: 0.56;
-    transform: translate(-50%, -50%) scaleY(1.08) scaleX(1);
+    opacity: 0.62;
+    background-position:
+      0 0,
+      0 0;
   }
   82% {
-    opacity: 0.22;
-    transform: translate(-50%, -50%) scaleY(0.96) scaleX(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scaleY(1) scaleX(1);
-  }
-}
-
-@keyframes crtPowerScan {
-  0%,
-  36% {
-    opacity: 0;
-  }
-  42% {
     opacity: 0.95;
-  }
-  58% {
-    opacity: 0.42;
-  }
-  76% {
-    opacity: 0.72;
+    background-position:
+      0 10px,
+      2px 0;
   }
   100% {
     opacity: 0;
+    background-position:
+      0 18px,
+      4px 0;
   }
 }
 
-@keyframes crtPowerVignette {
+@keyframes crtBootVignette {
   0%,
-  46% {
+  72% {
     opacity: 1;
   }
-  70% {
+  86% {
     opacity: 0.7;
   }
   100% {
@@ -316,69 +145,27 @@ body::after {
   }
 }
 
-@keyframes crtBootContent {
+@keyframes crtBootSequenceContent {
   0%,
-  42% {
+  76% {
     opacity: 0;
-    filter: brightness(0) contrast(1.8) saturate(0.4);
+    filter: brightness(0) contrast(2) saturate(0.35);
     transform: scaleY(0.002);
   }
-  50% {
-    opacity: 0.75;
-    filter: brightness(2.8) contrast(1.7) saturate(1.3);
-    transform: scaleY(0.035);
+  82% {
+    opacity: 0.84;
+    filter: brightness(3.1) contrast(1.8) saturate(1.35);
+    transform: scaleY(0.025);
   }
-  64% {
-    opacity: 0.96;
-    filter: brightness(1.55) contrast(1.35) saturate(1.2);
-    transform: scaleY(1.025);
+  89% {
+    opacity: 0.68;
+    filter: brightness(0.7) contrast(2) saturate(0.85);
+    transform: scaleY(0.72) translateX(6px);
   }
-  71% {
-    opacity: 0.82;
-    filter: brightness(0.72) contrast(1.6) saturate(0.9);
-  }
-  78% {
+  94% {
     opacity: 1;
-    filter: brightness(1.35) contrast(1.2) saturate(1.1);
-  }
-  100% {
-    opacity: 1;
-    filter: none;
-    transform: none;
-  }
-}
-
-@keyframes crtBootContentDesktop {
-  0%,
-  46% {
-    opacity: 0;
-    filter: brightness(0) contrast(2.1) saturate(0.25);
-    transform: scaleY(0.001) translateX(0);
-  }
-  52% {
-    opacity: 0.88;
-    filter: brightness(3.4) contrast(1.8) saturate(1.45);
-    transform: scaleY(0.025) translateX(-10px);
-  }
-  58% {
-    opacity: 0.62;
-    filter: brightness(0.55) contrast(2.2) saturate(0.8);
-    transform: scaleY(0.18) translateX(8px);
-  }
-  66% {
-    opacity: 1;
-    filter: brightness(1.9) contrast(1.45) saturate(1.25);
-    transform: scaleY(1.035) translateX(-3px);
-  }
-  72% {
-    opacity: 0.74;
-    filter: brightness(0.7) contrast(1.8) saturate(0.85);
-    transform: scaleY(0.985) translateX(3px);
-  }
-  80% {
-    opacity: 1;
-    filter: brightness(1.35) contrast(1.28) saturate(1.08);
-    transform: scaleY(1.006) translateX(0);
+    filter: brightness(1.5) contrast(1.32) saturate(1.14);
+    transform: scaleY(1.018) translateX(-2px);
   }
   100% {
     opacity: 1;
@@ -402,6 +189,57 @@ body::after {
     background-position:
       0 0,
       0 0;
+  }
+}
+
+.crt-boot-log {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: min(42rem, 82vw);
+  margin: 0;
+  white-space: pre-wrap;
+  text-align: center;
+  letter-spacing: 0.08em;
+  line-height: 1.7;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: crtBootLogReveal 3.05s ease-out forwards;
+}
+
+.glass-panel {
+  box-shadow:
+    inset 0 0 1px 1px rgba(77, 255, 160, 0.08),
+    inset 0 0 40px rgba(0, 0, 0, 0.34),
+    0 0 34px rgba(0, 230, 57, 0.08);
+}
+
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.025), transparent 22%),
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(0, 0, 0, 0.16) 3px 4px);
+  opacity: 0.55;
+}
+
+@keyframes crtBootLogReveal {
+  0%,
+  12% {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 8px));
+  }
+  20%,
+  82% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% - 4px));
   }
 }
 
