@@ -387,6 +387,29 @@ body::after {
   }
 }
 
+@keyframes nav-crt-off {
+  0% { transform: scaleY(1); filter: brightness(1); }
+  55% { transform: scaleY(0.012); filter: brightness(4); }
+  100% { transform: scaleY(0.0015); filter: brightness(7); opacity: 0.35; }
+}
+
+@keyframes nav-crt-on {
+  0% { transform: scaleY(0.0015); filter: brightness(7); opacity: 0.35; }
+  35% { transform: scaleY(0.012); filter: brightness(4); }
+  70% { transform: scaleY(1.04); filter: brightness(1.6); }
+  100% { transform: scaleY(1); filter: brightness(1); opacity: 1; }
+}
+
+.nav-crt-off {
+  transform-origin: center;
+  animation: nav-crt-off 0.2s ease-in forwards;
+}
+
+.nav-crt-on {
+  transform-origin: center;
+  animation: nav-crt-on 0.44s ease-out forwards;
+}
+
 @keyframes crtScanDrift {
   0% {
     background-position:

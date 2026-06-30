@@ -9,14 +9,24 @@ const navItems = [
   { href: '#contact', label: 'CONTACT' },
 ]
 
-export default function TopBar() {
+export default function TopBar({ onNavClick }: { onNavClick?: (id: string) => void }) {
   const [open, setOpen] = useState(false)
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (!onNavClick) return
+    const id = href.replace('#', '')
+    const el = document.getElementById(id)
+    if (!el) return
+    e.preventDefault()
+    onNavClick(id)
+  }
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-outline-variant">
       <nav className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4">
         <a
           href="#hero"
+          onClick={(e) => handleClick(e, '#hero')}
           className="font-headline-md text-headline-md text-primary-fixed-dim drop-shadow-[0_0_8px_rgba(0,230,57,0.8)] tracking-tighter"
         >
           {profile.osName}
@@ -28,6 +38,7 @@ export default function TopBar() {
             <a
               key={item.href}
               href={item.href}
+              onClick={(e) => handleClick(e, item.href)}
               className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary-fixed transition-colors"
             >
               {item.label}
@@ -60,7 +71,7 @@ export default function TopBar() {
               <a
                 key={item.href}
                 href={item.href}
-                onClick={() => setOpen(false)}
+                onClick={(e) => { handleClick(e, item.href); setOpen(false) }}
                 className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary-fixed py-3 border-b border-outline-variant/50"
               >
                 {item.label}
