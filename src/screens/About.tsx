@@ -25,7 +25,6 @@ export default function About({ visible }: { visible: boolean }) {
 
         {/* Left: bio */}
         <div style={{ flex: '1 1 340px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{ fontFamily: "'VT323',monospace", fontSize: 20, letterSpacing: 3, color: 'rgba(125,255,176,.6)', marginBottom: 6 }}>&gt; whoami</div>
           <h1 style={h1Style}>SIYAVASH<br />IZADI</h1>
           <div style={{ marginTop: 14, fontFamily: "'VT323',monospace", fontSize: 24, letterSpacing: 2, color: '#bfffd9' }}>PhD · NEUROSCIENCE</div>
           <p style={{ margin: '18px 0 0', maxWidth: '46ch', fontSize: 15, lineHeight: 1.7, color: 'rgba(190,255,215,.82)' }}>

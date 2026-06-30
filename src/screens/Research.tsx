@@ -30,7 +30,6 @@ export default function Research({ visible }: { visible: boolean }) {
       overflow: 'auto',
       padding: 'clamp(20px,3vw,46px)',
     }}>
-      <div style={{ fontFamily: "'VT323',monospace", fontSize: 20, letterSpacing: 3, color: 'rgba(125,255,176,.6)' }}>&gt; cat publications.log</div>
       <h1 style={h1Style}>RESEARCH</h1>
 
       <div style={{ marginTop: 18, display: 'flex', flexWrap: 'wrap', gap: 8 }}>

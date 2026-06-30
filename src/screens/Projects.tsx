@@ -23,7 +23,6 @@ export default function Projects({ visible }: { visible: boolean }) {
       overflow: 'auto',
       padding: 'clamp(20px,3vw,46px)',
     }}>
-      <div style={{ fontFamily: "'VT323',monospace", fontSize: 20, letterSpacing: 3, color: 'rgba(125,255,176,.6)' }}>&gt; ./run --apps --tools</div>
       <h1 style={h1Style}>PROJECTS</h1>
 
       <div style={{ marginTop: 24, display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: 16 }}>
