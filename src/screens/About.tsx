@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react'
 import Brain from '../components/brain/Brain'
-import EegPanel from '../components/brain/EegPanel'
 
 const h1Style: CSSProperties = {
   margin: '4px 0 0',
@@ -47,15 +46,11 @@ export default function About({ visible }: { visible: boolean }) {
           </div>
         </div>
 
-        {/* Right: brain + eeg */}
-        <div style={{ flex: '1 1 360px', display: 'flex', flexDirection: 'column', gap: 14, minWidth: 300 }}>
-          <div style={{ position: 'relative', flex: '1.4 1 0', minHeight: 200, border: '1px solid rgba(77,255,160,.22)', borderRadius: 10, overflow: 'hidden', background: 'rgba(2,12,8,.5)' }}>
+        {/* Right: brain */}
+        <div style={{ flex: '1 1 360px', display: 'flex', flexDirection: 'column', minWidth: 300 }}>
+          <div style={{ position: 'relative', flex: 1, minHeight: 240, border: '1px solid rgba(77,255,160,.22)', borderRadius: 10, overflow: 'hidden', background: 'rgba(2,12,8,.5)' }}>
             <div style={{ position: 'absolute', top: 8, left: 12, zIndex: 2, fontFamily: "'VT323',monospace", fontSize: 18, letterSpacing: 1, color: 'rgba(125,255,176,.6)' }}>NEURAL.MAP — live</div>
             <Brain />
-          </div>
-          <div style={{ position: 'relative', flex: '1 1 0', minHeight: 140, border: '1px solid rgba(77,255,160,.22)', borderRadius: 10, overflow: 'hidden', background: 'rgba(2,12,8,.5)' }}>
-            <div style={{ position: 'absolute', top: 8, right: 12, zIndex: 2, fontFamily: "'VT323',monospace", fontSize: 18, letterSpacing: 1, color: 'rgba(125,255,176,.6)' }}>EEG.ARRAY — 4ch</div>
-            <EegPanel />
           </div>
         </div>
 
