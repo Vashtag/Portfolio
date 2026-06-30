@@ -2,10 +2,9 @@
 
 A retro-terminal / CRT themed personal portfolio for **Dr. Siyavash Izadi** —
 neuroscientist, educator at the University of Waterloo, and builder of tools.
-Phosphor-green on near-black, scanlines, and an interactive 3D brain centerpiece.
+Phosphor-green on near-black, scanlines, and a live 2D neural-map brain centerpiece with an EEG trace panel.
 
-Built with **Vite + React + TypeScript + Tailwind CSS**, with the 3D brain
-powered by **three.js / React Three Fiber**.
+Built with **Vite + React + TypeScript + Tailwind CSS**, with canvas-powered neurovisualizations.
 
 ## Develop
 
@@ -43,5 +42,4 @@ update `base` in `vite.config.ts` and `homepage` in `package.json`.
 
 - Respects `prefers-reduced-motion` (disables flicker, scanline shimmer, and
   reveal animations).
-- The 3D brain is lazy-loaded and falls back to a static visual when WebGL is
-  unavailable.
+- The hero uses lightweight 2D canvas animations instead of requiring WebGL.
