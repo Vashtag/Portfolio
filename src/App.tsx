@@ -144,7 +144,7 @@ export default function App() {
           <div style={v({
             position: 'relative', zIndex: 20,
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-            padding: '10px clamp(14px,2vw,26px)',
+            padding: '6px clamp(14px,2vw,26px)',
             borderBottom: '1px solid rgba(77,255,160,.22)',
             background: 'linear-gradient(180deg,rgba(77,255,160,.07),transparent)',
           })}>
@@ -163,25 +163,11 @@ export default function App() {
             </div>
           </div>
 
-          {/* ── SPEC STRIP ───────────────────────────────────────────────── */}
-          <div style={v({
-            position: 'relative', zIndex: 20,
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-            padding: '5px clamp(14px,2vw,26px)',
-            borderBottom: '1px solid rgba(77,255,160,.10)',
-            fontFamily: "'VT323',monospace", fontSize: 17, letterSpacing: .5,
-            color: 'rgba(125,255,176,.55)',
-            flexWrap: 'wrap',
-          })}>
-            <span>SUBJECT: S. IZADI &nbsp;·&nbsp; ROLE: NEUROSCIENTIST</span>
-            <span>UPTIME: 273 DAYS &nbsp;·&nbsp; STATUS: ONLINE</span>
-          </div>
-
           {/* ── NAV TABS ─────────────────────────────────────────────────── */}
           <div style={v({
             position: 'relative', zIndex: 20,
             display: 'flex', alignItems: 'center', gap: 'clamp(16px,3vw,38px)',
-            padding: '12px clamp(14px,2vw,26px)',
+            padding: '7px clamp(14px,2vw,26px)',
             borderBottom: '1px solid rgba(77,255,160,.22)',
             background: 'linear-gradient(180deg,rgba(77,255,160,.06),transparent)',
             flexWrap: 'wrap',
@@ -194,7 +180,7 @@ export default function App() {
                   cursor: 'pointer',
                   fontFamily: "'IBM Plex Mono',monospace", fontWeight: 600,
                   fontSize: 13, letterSpacing: 2.5,
-                  padding: '6px 2px',
+                  padding: '4px 2px',
                   border: 'none',
                   borderBottom: `2px solid ${current === ch ? 'var(--accent)' : 'transparent'}`,
                   background: 'transparent',
