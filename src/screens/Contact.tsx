@@ -28,7 +28,6 @@ export default function Contact({ visible }: { visible: boolean }) {
       overflow: 'auto',
       padding: 'clamp(20px,3vw,46px)',
     }}>
-      <div style={{ fontFamily: "'VT323',monospace", fontSize: 20, letterSpacing: 3, color: 'rgba(125,255,176,.6)' }}>&gt; ./connect</div>
       <h1 style={h1Style}>CONTACT</h1>
 
       <p style={{ margin: '16px 0 0', maxWidth: '48ch', fontSize: 15, lineHeight: 1.7, color: 'rgba(190,255,215,.82)' }}>

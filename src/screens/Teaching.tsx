@@ -26,7 +26,6 @@ export default function Teaching({ visible }: { visible: boolean }) {
       overflow: 'auto',
       padding: 'clamp(20px,3vw,46px)',
     }}>
-      <div style={{ fontFamily: "'VT323',monospace", fontSize: 20, letterSpacing: 3, color: 'rgba(125,255,176,.6)' }}>&gt; ls /courses/uwaterloo</div>
       <h1 style={h1Style}>TEACHING</h1>
       <div style={{ marginTop: 6, fontFamily: "'VT323',monospace", fontSize: 24, letterSpacing: 2, color: '#ffe39a' }}>UNIVERSITY OF WATERLOO</div>
 
