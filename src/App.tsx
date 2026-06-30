@@ -107,7 +107,9 @@ export default function App() {
       width: '100%',
       display: 'flex',
       alignItems: 'stretch',
+      boxSizing: 'border-box',
       justifyContent: 'center',
+      padding: 'clamp(4px,0.8vw,10px)',
       background: 'radial-gradient(120% 120% at 50% 0%,#0a1410 0%,#03060a 60%,#01030500 100%),#03060a',
       fontFamily: "'IBM Plex Mono',monospace",
       color: '#7dffb0',
@@ -117,7 +119,13 @@ export default function App() {
       <div style={v({
         position: 'relative',
         width: '100%',
-        background: 'linear-gradient(180deg,#171c19,#0a0d0b 60%,#06080a)',
+        display: 'flex',
+        flexDirection: 'column',
+        background: 'linear-gradient(180deg,#1a1f1c,#0c0f0d 60%,#07090b)',
+        borderRadius: 14,
+        padding: 'clamp(5px,0.7vw,9px)',
+        boxShadow: '0 24px 60px -12px rgba(0,0,0,.9),inset 0 2px 2px rgba(255,255,255,.05),inset 0 -4px 12px rgba(0,0,0,.6)',
+        border: '1px solid #1e2620',
       })}>
 
         {/* ── SCREEN ─────────────────────────────────────────────────────── */}
@@ -125,8 +133,8 @@ export default function App() {
           position: 'relative',
           overflow: 'hidden',
           background: 'radial-gradient(130% 130% at 50% 40%,#06140d 0%,#04100a 55%,#020806 100%)',
-          minHeight: '100vh',
-          height: '100vh',
+          flex: 1,
+          minHeight: 0,
           display: 'flex',
           flexDirection: 'column',
           borderRadius: 6,
