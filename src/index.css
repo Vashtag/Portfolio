@@ -12,15 +12,15 @@ html {
 }
 
 body {
-  background-color: #0b141c;
-  background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 32px 32px;
+  background-color: #03060a;
   position: relative;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
+
+/* CRT-port branch overrides */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
 
 /* CRT scanline overlay */
 body::after {
@@ -392,6 +392,22 @@ body::after {
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+@keyframes flick {
+  0%, 97%, 100% { opacity: .02; }
+  98%           { opacity: .10; }
+  99%           { opacity: .04; }
+}
+@keyframes staticburst {
+  0%   { opacity: 0; }
+  10%  { opacity: .7; }
+  40%  { opacity: .5; }
+  100% { opacity: 0; }
+}
+@keyframes dotdrift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 3px 3px; }
 }
 
 /* The portfolio's motion (CRT boot, section fade-ins, the rotating brain) is
