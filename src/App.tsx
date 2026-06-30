@@ -129,6 +129,9 @@ export default function App() {
           height: '100vh',
           display: 'flex',
           flexDirection: 'column',
+          borderRadius: 6,
+          border: '1px solid rgba(77,255,160,.18)',
+          boxShadow: '0 0 0 2px rgba(0,0,0,.9), inset 0 0 0 1px rgba(77,255,160,.06)',
         })}>
 
           {/* ── TOP BAR ──────────────────────────────────────────────────── */}
@@ -218,7 +221,9 @@ export default function App() {
           {/* Dot drift */}
           <div style={v({ position: 'absolute', inset: 0, zIndex: 41, pointerEvents: 'none', background: 'radial-gradient(circle,rgba(0,0,0,0) 0%,rgba(0,0,0,0) 32%,rgba(0,0,0,.5) 80%)', backgroundSize: '3px 3px', mixBlendMode: 'multiply', opacity: .55, animation: 'dotdrift 8s linear infinite' })} />
           {/* Vignette */}
-          <div style={v({ position: 'absolute', inset: 0, zIndex: 42, pointerEvents: 'none', boxShadow: 'inset 0 0 100px 18px rgba(0,0,0,.7),inset 0 0 30px rgba(0,0,0,.5)' })} />
+          <div style={v({ position: 'absolute', inset: 0, zIndex: 42, pointerEvents: 'none', borderRadius: 6, boxShadow: 'inset 0 0 100px 18px rgba(0,0,0,.7),inset 0 0 30px rgba(0,0,0,.5)' })} />
+          {/* CRT glass bulge — convex highlight simulating curved phosphor glass */}
+          <div style={v({ position: 'absolute', inset: 0, zIndex: 43, pointerEvents: 'none', borderRadius: 6, background: 'radial-gradient(ellipse 90% 75% at 50% 38%, rgba(255,255,255,.028) 0%, rgba(255,255,255,.010) 38%, transparent 68%), radial-gradient(ellipse 55% 35% at 50% 12%, rgba(255,255,255,.032) 0%, transparent 100%)', mixBlendMode: 'screen' })} />
           {/* Flicker */}
           <div style={v({ position: 'absolute', inset: 0, zIndex: 43, pointerEvents: 'none', background: '#7dffb0', mixBlendMode: 'overlay', animation: 'flick 7s infinite' })} />
           {/* Glitch – channel-switch burst */}
