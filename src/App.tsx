@@ -27,8 +27,6 @@ export default function App() {
     <>
       <div key={bootKey} className="crt-power-on" aria-hidden="true">
         <CrtBootLog />
-        <div className="crt-power-line" />
-        <div className="crt-power-glow" />
       </div>
 
       <div key={`content-${bootKey}`} className="crt-boot-content">
