@@ -46,6 +46,7 @@ export default function TopBar({ onNavClick }: { onNavClick?: (id: string) => vo
           ))}
           <a
             href={`mailto:${links.email}`}
+            onClick={handleChannelClick}
             className="font-label-caps text-label-caps border border-primary-fixed-dim px-4 py-2 text-primary-fixed-dim hover:bg-primary-fixed-dim hover:text-background transition-all active:scale-95"
           >
             EXECUTE_CONNECT
@@ -79,7 +80,10 @@ export default function TopBar({ onNavClick }: { onNavClick?: (id: string) => vo
             ))}
             <a
               href={`mailto:${links.email}`}
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                handleChannelClick()
+                setOpen(false)
+              }}
               className="font-label-caps text-label-caps text-primary-fixed-dim py-3"
             >
               {'>'} EXECUTE_CONNECT
