@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import TopBar from './components/TopBar'
-import SideNav from './components/SideNav'
 import Hero from './components/Hero'
 import Bio from './components/Bio'
 import Research from './components/Research'
@@ -48,9 +47,8 @@ export default function App() {
 
       <div key={`content-${bootKey}`} className="crt-boot-content">
         <TopBar onNavClick={handleNavClick} />
-        <SideNav />
 
-        <div className={`lg:ml-64 ${flipClass}`}>
+        <div className={flipClass}>
           <main className="pt-24 min-h-screen">
             <Hero />
             <Bio />
