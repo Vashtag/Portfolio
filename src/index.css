@@ -288,9 +288,8 @@ body::after {
     transform: scaleY(0.985) translateX(4px);
   }
   100% {
-    opacity: 1;
-    filter: none;
-    transform: none;
+    opacity: 0;
+    transform: translateX(0);
   }
 }
 
