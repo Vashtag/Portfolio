@@ -21,7 +21,9 @@ export default function EegPanel() {
     let dpr = 1
     let cols = 0
     let tick = 0
-    let buffers = rows.map(() => [] as number[])
+    // Circular buffers (Float32Array + head pointer) — O(1) push vs O(n) shift
+    let bufs: Float32Array[] = []
+    let heads: number[] = []
     let raf = 0
 
     const resize = () => {
@@ -31,27 +33,27 @@ export default function EegPanel() {
       canvas.width = width
       canvas.height = height
       cols = Math.max(2, Math.floor(width / (1.6 * dpr)))
-      buffers = rows.map(() => new Array(cols).fill(0))
+      bufs = rows.map(() => new Float32Array(cols))
+      heads = rows.map(() => 0)
     }
 
     const loop = () => {
       tick += 1
       ctx.clearRect(0, 0, width, height)
 
+      // Grid lines — single batched path
       ctx.strokeStyle = 'rgba(120,255,180,0.065)'
       ctx.lineWidth = 1
       ctx.beginPath()
-      for (let x = 0; x < width; x += 24 * dpr) {
-        ctx.moveTo(x, 0)
-        ctx.lineTo(x, height)
-      }
-      for (let y = 0; y < height; y += 24 * dpr) {
-        ctx.moveTo(0, y)
-        ctx.lineTo(width, y)
-      }
+      for (let x = 0; x < width; x += 24 * dpr) { ctx.moveTo(x, 0); ctx.lineTo(x, height) }
+      for (let y = 0; y < height; y += 24 * dpr) { ctx.moveTo(0, y); ctx.lineTo(width, y) }
       ctx.stroke()
 
       const rowHeight = height / rows.length
+      ctx.lineWidth = 1.6 * dpr
+      // Set font once outside the per-row loop
+      ctx.font = `${11 * dpr}px monospace`
+
       rows.forEach((row, index) => {
         const centerY = rowHeight * (index + 0.5)
         let value =
@@ -60,24 +62,26 @@ export default function EegPanel() {
           (Math.random() - 0.5) * row.amp * 0.5
         if (Math.random() < 0.012) value += (Math.random() < 0.5 ? 1 : -1) * row.amp * 2.6
 
-        const buffer = buffers[index]
-        buffer.push(value)
-        if (buffer.length > cols) buffer.shift()
+        // O(1) circular buffer write
+        bufs[index][heads[index]] = value
+        heads[index] = (heads[index] + 1) % cols
 
+        // Draw trace with shadow on, then turn shadow off once after all rows
         ctx.beginPath()
-        ctx.lineWidth = 1.6 * dpr
         ctx.strokeStyle = row.color
         ctx.shadowColor = row.color
         ctx.shadowBlur = 6 * dpr
-        buffer.forEach((v, x) => {
-          const px = x * (width / cols)
+        const head = heads[index]
+        for (let i = 0; i < cols; i++) {
+          const v = bufs[index][(head + i) % cols]
+          const px = i * (width / cols)
           const py = centerY - v * rowHeight * 0.85
-          x === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py)
-        })
+          i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py)
+        }
         ctx.stroke()
         ctx.shadowBlur = 0
+
         ctx.fillStyle = row.color
-        ctx.font = `${11 * dpr}px monospace`
         ctx.fillText(row.name, 6 * dpr, centerY - rowHeight * 0.3)
       })
 
