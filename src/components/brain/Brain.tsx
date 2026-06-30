@@ -1,5 +1,4 @@
 import { Component, lazy, Suspense, useEffect, useState, type ReactNode } from 'react'
-import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import { isWebGLAvailable } from '../../lib/webgl'
 import BrainFallback from './BrainFallback'
 
@@ -32,14 +31,14 @@ class BrainErrorBoundary extends Component<
  * - Renders the interactive 3D wireframe brain when WebGL is available.
  * - Falls back to a static SVG brain when WebGL is missing, while the 3D chunk
  *   loads, or if a browser/GPU-specific WebGL error occurs.
- * - Auto-rotation / pulsing is disabled when the user prefers reduced motion.
+ * - The brain animates (slow auto-rotation + gentle pulse) by design, on every
+ *   device, regardless of the OS "reduce motion" setting.
  */
 export default function Brain() {
-  const prefersReducedMotion = usePrefersReducedMotion()
   const [webgl, setWebgl] = useState(true)
   const fallback = (
     <div className="absolute inset-0">
-      <BrainFallback pulse={!prefersReducedMotion} />
+      <BrainFallback pulse />
     </div>
   )
 
@@ -59,7 +58,7 @@ export default function Brain() {
   return (
     <BrainErrorBoundary fallback={fallback}>
       <Suspense fallback={fallback}>
-        <BrainScene animate={!prefersReducedMotion} />
+        <BrainScene animate />
       </Suspense>
     </BrainErrorBoundary>
   )
