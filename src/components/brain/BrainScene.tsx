@@ -125,27 +125,28 @@ function ForceSize() {
     if (!parent) return
 
     let raf = 0
-    let matchedFrames = 0
-    const start = performance.now()
 
     // Drive sizing from the container's layout size (clientWidth/Height), which
-    // — unlike getBoundingClientRect that R3F uses internally — is immune to the
-    // ancestor CRT-boot scale transform. Keep correcting until the canvas
-    // matches for a few frames (or we give up after a few seconds).
+    // — unlike the getBoundingClientRect that R3F measures internally — is
+    // immune to the ancestor CRT-boot scale transform. We enforce this on every
+    // animation frame for the brain's whole lifetime: R3F's own measurement can
+    // (re)set the canvas to height 0 at any time during the boot transform, and
+    // it only self-corrects on a window resize/scroll. Continuously re-applying
+    // the real size means the brain is correct on first paint without needing a
+    // scroll, and stays correct afterwards. setSize only runs on a real
+    // mismatch, so the steady-state cost is a cheap per-frame comparison.
     const tick = () => {
       const w = parent.clientWidth
       const h = parent.clientHeight
       if (w > 0 && h > 0) {
-        if (Math.abs(gl.domElement.clientHeight - h) > 1 || Math.abs(gl.domElement.clientWidth - w) > 1) {
+        if (
+          Math.abs(gl.domElement.clientHeight - h) > 1 ||
+          Math.abs(gl.domElement.clientWidth - w) > 1
+        ) {
           setSize(w, h)
-          matchedFrames = 0
-        } else {
-          matchedFrames += 1
         }
       }
-      if (matchedFrames < 8 && performance.now() - start < 5000) {
-        raf = requestAnimationFrame(tick)
-      }
+      raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
@@ -178,6 +179,7 @@ export default function BrainScene({ animate }: { animate: boolean }) {
     <Canvas
       camera={{ position: [0, 0, 3.1], fov: 50 }}
       dpr={[1, 2]}
+      frameloop="always"
       gl={{ antialias: true, alpha: true }}
     >
       <ForceSize />
