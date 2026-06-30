@@ -8,61 +8,63 @@ type Segment = ['M', number, number] | ['C', number, number, number, number, num
 // Lateral (left-hemisphere) view. Coordinate space 96 × 90, centred at (48, 44).
 // Frontal pole is lower-left; occipital pole is right; temporal lobe hangs below.
 const CEREBRUM: Segment[] = [
-  ['M', 14, 54],
-  ['C', 7, 44, 6, 28, 12, 17],   // frontal, rising
-  ['C', 17, 6, 28, 3, 41, 3],    // frontal superior
-  ['C', 53, 3, 64, 7, 72, 13],   // parietal superior
-  ['C', 80, 19, 85, 29, 85, 41], // occipital slope
-  ['C', 85, 52, 80, 58, 73, 61], // posterior
-  ['C', 65, 64, 55, 65, 49, 67], // temporal-parietal junction
-  ['C', 38, 70, 25, 67, 19, 61], // temporal lobe
-  ['C', 16, 58, 14, 57, 14, 54], // back to frontal pole
+  ['M', 14, 55],
+  ['C', 5, 47, 4, 29, 10, 17],    // frontal pole, bulbous curve
+  ['C', 15, 5, 28, 2, 42, 2],     // superior frontal
+  ['C', 57, 2, 69, 7, 77, 16],    // parietal superior
+  ['C', 85, 23, 89, 35, 88, 47],  // occipital slope
+  ['C', 87, 57, 81, 64, 71, 67],  // posterior inferior
+  ['C', 61, 69, 50, 70, 44, 71],  // temporal-parietal junction
+  ['C', 32, 73, 19, 69, 15, 62],  // temporal lobe
+  ['C', 14, 59, 14, 57, 14, 55],
   ['Z'],
 ]
 const CEREBELLUM: Segment[] = [
-  ['M', 64, 59],
-  ['C', 70, 56, 79, 58, 84, 63],
-  ['C', 88, 68, 87, 76, 80, 79],
-  ['C', 72, 81, 62, 77, 59, 71],
-  ['C', 57, 65, 58, 60, 64, 59],
+  ['M', 65, 62],
+  ['C', 72, 59, 81, 61, 86, 67],
+  ['C', 90, 73, 88, 81, 81, 83],
+  ['C', 73, 86, 63, 81, 60, 74],
+  ['C', 57, 68, 59, 63, 65, 62],
   ['Z'],
 ]
 const STEM: Segment[] = [
-  ['M', 57, 68],
-  ['C', 56, 73, 56, 80, 58, 85],
-  ['C', 59, 88, 63, 88, 64, 84],
-  ['C', 65, 78, 64, 71, 63, 68],
+  ['M', 58, 70],
+  ['C', 57, 75, 57, 82, 59, 87],
+  ['C', 60, 90, 64, 90, 65, 86],
+  ['C', 66, 80, 65, 73, 64, 70],
 ]
-// Lateral sulcus (Sylvian fissure) — the major horizontal landmark
+// Lateral sulcus (Sylvian fissure) — the major horizontal landmark separating frontal/parietal from temporal
 const FISSURE: Segment[] = [
-  ['M', 18, 52],
-  ['C', 30, 55, 45, 52, 55, 47],
-  ['C', 62, 43, 68, 42, 75, 44],
+  ['M', 16, 55],
+  ['C', 28, 58, 46, 55, 58, 50],
+  ['C', 65, 46, 72, 45, 78, 48],
 ]
 const GYRI: Segment[][] = [
-  // Superior frontal gyrus (arcs across the top)
-  [['M', 15, 19], ['C', 25, 12, 38, 9, 50, 9], ['C', 61, 9, 71, 14, 77, 22]],
-  // Upper-middle frontal
-  [['M', 10, 29], ['C', 21, 23, 34, 21, 45, 22], ['C', 55, 23, 64, 20, 72, 26]],
-  // Middle frontal gyrus (main horizontal fold)
-  [['M', 9, 40], ['C', 19, 34, 31, 32, 43, 34], ['C', 53, 36, 60, 31, 67, 31], ['C', 75, 31, 81, 36, 83, 45]],
-  // Inferior frontal gyrus
-  [['M', 12, 47], ['C', 21, 43, 32, 42, 42, 44], ['C', 50, 46, 55, 43, 60, 43]],
-  // Central sulcus — vertical landmark between frontal and parietal
-  [['M', 53, 6], ['C', 56, 15, 58, 25, 59, 35], ['C', 60, 44, 59, 52, 58, 58]],
-  // Parietal — superior
-  [['M', 63, 9], ['C', 68, 18, 72, 29, 72, 40], ['C', 72, 48, 70, 55, 68, 59]],
-  // Parieto-occipital fold
-  [['M', 75, 17], ['C', 81, 26, 83, 37, 81, 47]],
-  // Superior temporal gyrus (just below Sylvian)
-  [['M', 20, 56], ['C', 33, 59, 47, 57, 58, 52], ['C', 66, 48, 73, 47, 77, 49]],
-  // Middle temporal gyrus
-  [['M', 26, 63], ['C', 38, 67, 51, 64, 61, 59], ['C', 68, 55, 73, 54, 76, 56]],
-  // Short inferior-frontal folds (branching pattern)
-  [['M', 15, 34], ['C', 22, 31, 27, 33, 30, 38]],
-  [['M', 16, 24], ['C', 22, 20, 27, 22, 31, 27]],
-  // Short postcentral
-  [['M', 61, 8], ['C', 64, 15, 65, 23, 66, 32]],
+  // Superior frontal sulcus (long horizontal)
+  [['M', 11, 21], ['C', 23, 14, 37, 12, 50, 13], ['C', 60, 14, 68, 11, 76, 19]],
+  // Inferior frontal sulcus
+  [['M', 11, 37], ['C', 22, 32, 34, 31, 46, 33], ['C', 55, 34, 60, 31, 66, 34]],
+  // Precentral sulcus (just anterior to central sulcus)
+  [['M', 46, 4], ['C', 49, 14, 51, 27, 51, 40], ['C', 51, 49, 50, 54, 48, 59]],
+  // Central sulcus (Rolando) — primary motor/sensory boundary
+  [['M', 54, 4], ['C', 57, 14, 59, 27, 60, 40], ['C', 60, 50, 59, 56, 57, 61]],
+  // Postcentral sulcus
+  [['M', 63, 6], ['C', 66, 16, 68, 29, 68, 42], ['C', 68, 52, 66, 59, 64, 64]],
+  // Intraparietal sulcus (runs horizontally into parietal)
+  [['M', 69, 14], ['C', 74, 24, 78, 36, 79, 48], ['C', 79, 55, 76, 62, 72, 65]],
+  // Parieto-occipital sulcus
+  [['M', 79, 19], ['C', 85, 30, 88, 43, 85, 55]],
+  // Superior temporal sulcus (below Sylvian)
+  [['M', 21, 62], ['C', 35, 65, 52, 63, 64, 58], ['C', 72, 54, 78, 54, 82, 57]],
+  // Middle temporal sulcus / inferior temporal gyrus boundary
+  [['M', 26, 68], ['C', 38, 71, 54, 69, 65, 63]],
+  // Short frontal folds (inferior frontal branching)
+  [['M', 10, 29], ['C', 18, 25, 24, 27, 27, 32]],
+  [['M', 11, 47], ['C', 19, 44, 25, 44, 29, 49]],
+  // Short prefrontal convolutions
+  [['M', 9, 44], ['C', 15, 41, 19, 42, 22, 47]],
+  // Occipital sulcus
+  [['M', 84, 35], ['C', 88, 44, 87, 54, 83, 61]],
 ]
 
 function rgba(hex: string, alpha: number) {
@@ -280,10 +282,10 @@ export default function Brain() {
       ctx.fillRect(0, 0, width, height)
       ctx.lineWidth = 1 * dpr
       ctx.strokeStyle = rgba(accent, 0.32)
-      for (let y = 61; y <= 76; y += 2) {
+      for (let y = 64; y <= 80; y += 2) {
         ctx.beginPath()
         for (let s = 0; s <= 12; s += 1) {
-          const x = 61 + ((82 - 61) * s) / 12
+          const x = 62 + ((84 - 62) * s) / 12
           const p = point(x, y + Math.sin(s * 0.85 + y) * 0.5)
           s === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)
         }

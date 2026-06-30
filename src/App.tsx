@@ -106,9 +106,8 @@ export default function App() {
       minHeight: '100vh',
       width: '100%',
       display: 'flex',
-      alignItems: 'center',
+      alignItems: 'stretch',
       justifyContent: 'center',
-      padding: 'clamp(8px,2.2vw,32px)',
       background: 'radial-gradient(120% 120% at 50% 0%,#0a1410 0%,#03060a 60%,#01030500 100%),#03060a',
       fontFamily: "'IBM Plex Mono',monospace",
       color: '#7dffb0',
@@ -118,26 +117,18 @@ export default function App() {
       <div style={v({
         position: 'relative',
         width: '100%',
-        maxWidth: 1380,
         background: 'linear-gradient(180deg,#171c19,#0a0d0b 60%,#06080a)',
-        borderRadius: 26,
-        padding: 'clamp(12px,1.6vw,22px)',
-        boxShadow: '0 40px 90px -20px rgba(0,0,0,.85),inset 0 2px 2px rgba(255,255,255,.06),inset 0 -6px 18px rgba(0,0,0,.7)',
-        border: '1px solid #20271f',
       })}>
 
         {/* ── SCREEN ─────────────────────────────────────────────────────── */}
         <div style={v({
           position: 'relative',
-          borderRadius: 16,
           overflow: 'hidden',
           background: 'radial-gradient(130% 130% at 50% 40%,#06140d 0%,#04100a 55%,#020806 100%)',
-          minHeight: 'min(82vh,860px)',
-          height: 'min(82vh,860px)',
+          minHeight: '100vh',
+          height: '100vh',
           display: 'flex',
           flexDirection: 'column',
-          border: '1px solid #0c160f',
-          boxShadow: 'inset 0 0 1px 1px rgba(77,255,160,.12)',
         })}>
 
           {/* ── TOP BAR ──────────────────────────────────────────────────── */}
@@ -227,7 +218,7 @@ export default function App() {
           {/* Dot drift */}
           <div style={v({ position: 'absolute', inset: 0, zIndex: 41, pointerEvents: 'none', background: 'radial-gradient(circle,rgba(0,0,0,0) 0%,rgba(0,0,0,0) 32%,rgba(0,0,0,.5) 80%)', backgroundSize: '3px 3px', mixBlendMode: 'multiply', opacity: .55, animation: 'dotdrift 8s linear infinite' })} />
           {/* Vignette */}
-          <div style={v({ position: 'absolute', inset: 0, zIndex: 42, pointerEvents: 'none', borderRadius: 16, boxShadow: 'inset 0 0 100px 18px rgba(0,0,0,.7),inset 0 0 30px rgba(0,0,0,.5)' })} />
+          <div style={v({ position: 'absolute', inset: 0, zIndex: 42, pointerEvents: 'none', boxShadow: 'inset 0 0 100px 18px rgba(0,0,0,.7),inset 0 0 30px rgba(0,0,0,.5)' })} />
           {/* Flicker */}
           <div style={v({ position: 'absolute', inset: 0, zIndex: 43, pointerEvents: 'none', background: '#7dffb0', mixBlendMode: 'overlay', animation: 'flick 7s infinite' })} />
           {/* Glitch – channel-switch burst */}

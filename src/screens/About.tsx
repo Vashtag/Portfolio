@@ -48,8 +48,8 @@ export default function About({ visible }: { visible: boolean }) {
 
         {/* Right: brain */}
         <div style={{ flex: '1 1 360px', display: 'flex', flexDirection: 'column', minWidth: 300 }}>
-          <div style={{ position: 'relative', flex: 1, minHeight: 240, border: '1px solid rgba(77,255,160,.22)', borderRadius: 10, overflow: 'hidden', background: 'rgba(2,12,8,.5)' }}>
-            <div style={{ position: 'absolute', top: 8, left: 12, zIndex: 2, fontFamily: "'VT323',monospace", fontSize: 18, letterSpacing: 1, color: 'rgba(125,255,176,.6)' }}>NEURAL.MAP — live</div>
+          <div style={{ position: 'relative', flex: 1, minHeight: 240 }}>
+            <div style={{ position: 'absolute', top: 8, left: 12, zIndex: 2, fontFamily: "'VT323',monospace", fontSize: 18, letterSpacing: 1, color: 'rgba(125,255,176,.4)' }}>NEURAL.MAP — live</div>
             <Brain />
           </div>
         </div>
