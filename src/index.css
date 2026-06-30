@@ -46,7 +46,7 @@ body::after {
   z-index: 1000;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   pointer-events: none;
   overflow: hidden;
   background:
@@ -194,14 +194,16 @@ body::after {
 
 .crt-boot-log {
   position: absolute;
-  left: clamp(1.5rem, 6vw, 6rem);
-  top: clamp(1.5rem, 10vh, 6rem);
+  left: 50%;
+  top: 50%;
   z-index: 2;
-  max-width: min(42rem, 82vw);
+  width: min(42rem, 82vw);
   margin: 0;
   white-space: pre-wrap;
+  text-align: center;
   letter-spacing: 0.08em;
   line-height: 1.7;
+  transform: translate(-50%, -50%);
   opacity: 0;
   animation: crtBootLogReveal 3.05s ease-out forwards;
 }
@@ -228,16 +230,16 @@ body::after {
   0%,
   12% {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translate(-50%, calc(-50% + 8px));
   }
   20%,
   82% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(-50%, -50%);
   }
   100% {
     opacity: 0;
-    transform: translateY(-4px);
+    transform: translate(-50%, calc(-50% - 4px));
   }
 }
 
