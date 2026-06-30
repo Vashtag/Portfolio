@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Brain from './brain/Brain'
+import EegPanel from './brain/EegPanel'
 import { profile } from '../content'
 
 // Types out the hero name letter-by-letter.
@@ -33,16 +34,29 @@ export default function Hero() {
       id="hero"
       className="relative flex flex-col items-center justify-center py-20 px-margin-mobile md:px-margin-desktop overflow-hidden border-b border-outline-variant"
     >
-      <div
-        ref={brainRef}
-        role="img"
-        aria-label="Interactive 3D wireframe brain"
-        className="relative w-full max-w-2xl aspect-square flex items-center justify-center"
-      >
-        <Brain />
-        {/* Decorative crosshair lines */}
-        <div className="absolute top-0 left-0 w-32 h-px bg-outline-variant rotate-45 origin-left pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-32 h-px bg-outline-variant rotate-45 origin-right pointer-events-none" />
+      <div className="grid w-full max-w-5xl grid-cols-1 gap-4 lg:grid-cols-[1.35fr_0.85fr]">
+        <div
+          ref={brainRef}
+          role="img"
+          aria-label="Live 2D neural map of an anatomical brain"
+          className="glass-panel relative min-h-[320px] overflow-hidden border border-primary-fixed-dim/25 bg-surface-container-low/60 sm:min-h-[430px]"
+        >
+          <div className="absolute left-4 top-3 z-10 font-code-sm text-code-sm uppercase tracking-[0.22em] text-primary-fixed-dim/70">
+            NEURAL.MAP — live
+          </div>
+          <Brain />
+        </div>
+
+        <div
+          role="img"
+          aria-label="Live four-channel EEG trace"
+          className="glass-panel relative min-h-[220px] overflow-hidden border border-secondary-fixed/25 bg-surface-container-low/60 lg:self-end"
+        >
+          <div className="absolute right-4 top-3 z-10 font-code-sm text-code-sm uppercase tracking-[0.22em] text-secondary-fixed/75">
+            EEG.ARRAY — 4CH
+          </div>
+          <EegPanel />
+        </div>
       </div>
 
       <div className="text-center mt-8 space-y-4 z-10">

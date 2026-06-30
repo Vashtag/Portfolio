@@ -405,6 +405,55 @@ body::after {
   }
 }
 
+.crt-boot-log {
+  position: absolute;
+  left: clamp(1.5rem, 6vw, 6rem);
+  top: clamp(1.5rem, 10vh, 6rem);
+  z-index: 2;
+  max-width: min(42rem, 82vw);
+  margin: 0;
+  white-space: pre-wrap;
+  letter-spacing: 0.08em;
+  line-height: 1.7;
+  opacity: 0;
+  animation: crtBootLogReveal 1.45s ease-out forwards;
+}
+
+.glass-panel {
+  box-shadow:
+    inset 0 0 1px 1px rgba(77, 255, 160, 0.08),
+    inset 0 0 40px rgba(0, 0, 0, 0.34),
+    0 0 34px rgba(0, 230, 57, 0.08);
+}
+
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.025), transparent 22%),
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(0, 0, 0, 0.16) 3px 4px);
+  opacity: 0.55;
+}
+
+@keyframes crtBootLogReveal {
+  0%,
+  12% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  30%,
+  78% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
 .crt-glow {
   text-shadow: 0 0 10px var(--primary-glow);
 }

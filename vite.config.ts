@@ -8,15 +8,4 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: '/Portfolio/',
   plugins: [react()],
-  build: {
-    // Split the heavy 3D libraries into their own chunk so the brain scene is
-    // code-split out of the initial bundle parse.
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          three: ['three', '@react-three/fiber'],
-        },
-      },
-    },
-  },
 })
