@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import TopBar from './components/TopBar'
 import SideNav from './components/SideNav'
 import Hero from './components/Hero'
@@ -15,6 +15,17 @@ export default function App() {
   // up and the content stuck invisible (a blank/white screen). A stable key
   // plays the boot animation exactly once per page load.
   const [bootKey] = useState(() => Date.now())
+  const [channelSwitching, setChannelSwitching] = useState(false)
+  const channelTimer = useRef<number | undefined>(undefined)
+
+  const playChannelSwitch = () => {
+    window.clearTimeout(channelTimer.current)
+    setChannelSwitching(false)
+    requestAnimationFrame(() => {
+      setChannelSwitching(true)
+      channelTimer.current = window.setTimeout(() => setChannelSwitching(false), 720)
+    })
+  }
 
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
@@ -23,14 +34,21 @@ export default function App() {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
   }, [])
 
+  useEffect(() => () => window.clearTimeout(channelTimer.current), [])
+
   return (
     <>
       <div key={bootKey} className="crt-power-on" aria-hidden="true">
         <CrtBootLog />
       </div>
 
-      <div key={`content-${bootKey}`} className="crt-boot-content">
-        <TopBar />
+      {channelSwitching && <div className="crt-channel-static" aria-hidden="true" />}
+
+      <div
+        key={`content-${bootKey}`}
+        className={`crt-boot-content${channelSwitching ? ' crt-channel-switch' : ''}`}
+      >
+        <TopBar onChannelChange={playChannelSwitch} />
         <SideNav />
 
         <div className="lg:ml-64">
