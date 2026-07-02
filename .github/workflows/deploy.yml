@@ -7,9 +7,9 @@ on:
   # Allow manual runs from the Actions tab.
   workflow_dispatch:
 
-# Permissions needed for GitHub Pages deployment and the branch-root fallback.
+# Permissions needed for GitHub Pages deployment.
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -42,19 +42,6 @@ jobs:
 
       - name: Build
         run: npm run build
-
-      - name: Publish branch-root fallback
-        run: |
-          cp -R dist/. .
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html favicon.svg assets
-          if git diff --cached --quiet; then
-            echo "Branch-root build output is already current."
-          else
-            git commit -m "Publish built site [skip ci]"
-            git push
-          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
