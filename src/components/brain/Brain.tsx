@@ -46,29 +46,46 @@ const FISSURE: Segment[] = [
   ['C', 58, 46, 65, 45, 71, 47],
 ]
 const GYRI: Segment[][] = [
-  // Superior frontal sulcus
-  [['M', 12, 22], ['C', 22, 16, 33, 14, 43, 15], ['C', 50, 15, 55, 13, 60, 15]],
+  // ── Frontal lobe ──────────────────────────────────────────────
+  // Superior frontal sulcus (long, high)
+  [['M', 12, 22], ['C', 22, 16, 33, 14, 43, 15], ['C', 48, 15, 53, 14, 58, 15]],
   // Inferior frontal sulcus
-  [['M', 12, 35], ['C', 21, 31, 30, 30, 39, 32], ['C', 44, 33, 48, 32, 52, 34]],
-  // Precentral sulcus (anterior to the central sulcus; stops at the fissure)
+  [['M', 12, 34], ['C', 21, 30, 30, 29, 39, 31], ['C', 44, 32, 48, 31, 52, 33]],
+  // Vertical folds crossing the frontal gyri
+  [['M', 20, 18], ['C', 21, 24, 21, 29, 20, 34]],
+  [['M', 30, 16], ['C', 31, 22, 31, 28, 30, 33]],
+  // Prefrontal / frontal-pole convolutions
+  [['M', 11, 27], ['C', 16, 24, 20, 25, 23, 29]],
+  [['M', 12, 41], ['C', 17, 39, 22, 40, 26, 44]],
+  [['M', 13, 47], ['C', 18, 46, 22, 47, 25, 50]],
+  [['M', 40, 20], ['C', 44, 22, 47, 26, 48, 32]],
+  // ── Central complex ───────────────────────────────────────────
+  // Precentral sulcus (stops at the fissure)
   [['M', 44, 8], ['C', 46, 18, 47, 28, 46, 37], ['C', 46, 42, 45, 45, 44, 47]],
   // Central sulcus of Rolando — sinuous motor/sensory landmark
   [['M', 53, 6], ['C', 56, 16, 55, 26, 57, 34], ['C', 58, 40, 57, 44, 57, 47]],
   // Postcentral sulcus
   [['M', 62, 8], ['C', 65, 18, 67, 29, 66, 40], ['C', 66, 45, 65, 48, 64, 50]],
-  // Intraparietal sulcus (horizontal, sweeps into the parietal lobe)
+  // ── Parietal / occipital ──────────────────────────────────────
+  // Intraparietal sulcus (sweeps horizontally into the parietal lobe)
   [['M', 66, 30], ['C', 73, 32, 79, 35, 82, 41]],
+  // Secondary parietal fold
+  [['M', 68, 22], ['C', 74, 26, 79, 31, 81, 37]],
   // Parieto-occipital sulcus
   [['M', 80, 22], ['C', 85, 31, 87, 42, 84, 52]],
-  // Lateral occipital sulcus
-  [['M', 82, 40], ['C', 86, 45, 86, 51, 83, 56]],
+  // Lateral occipital sulci
+  [['M', 84, 33], ['C', 88, 39, 88, 46, 85, 51]],
+  [['M', 82, 41], ['C', 86, 46, 86, 51, 83, 56]],
+  // ── Temporal lobe ─────────────────────────────────────────────
   // Superior temporal sulcus (parallels the Sylvian fissure below it)
   [['M', 20, 57], ['C', 33, 60, 47, 58, 58, 54], ['C', 64, 51, 69, 51, 73, 53]],
   // Middle temporal sulcus
-  [['M', 24, 62], ['C', 36, 65, 50, 63, 60, 58]],
-  // Short frontal convolution folds
-  [['M', 11, 28], ['C', 18, 24, 25, 26, 29, 31]],
-  [['M', 12, 43], ['C', 19, 40, 26, 41, 30, 46]],
+  [['M', 22, 61], ['C', 35, 64, 50, 62, 61, 57]],
+  // Inferior temporal fold
+  [['M', 26, 64], ['C', 38, 66, 50, 64, 58, 60]],
+  // Short temporal cross-folds
+  [['M', 34, 58], ['C', 35, 60, 36, 62, 36, 64]],
+  [['M', 48, 56], ['C', 49, 58, 50, 60, 50, 62]],
 ]
 
 function rgba(hex: string, alpha: number) {
