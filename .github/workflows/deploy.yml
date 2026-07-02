@@ -13,12 +13,14 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only the latest Pages deployment attempt to run. GitHub Pages rejects
-# creating a new deployment while an older one is still in progress, so cancel
-# superseded workflow runs instead of letting them race the deploy step.
+# Queue deployments instead of cancelling in-flight ones. GitHub Pages rejects
+# a new deployment while an older one is still in progress, and cancelling a
+# run mid-deploy orphans that deployment in the "in progress" state — which
+# then blocks the next run with "Deployment request failed … due to in
+# progress deployment". Letting runs queue avoids the race entirely.
 concurrency:
   group: 'pages'
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
