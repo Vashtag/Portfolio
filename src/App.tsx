@@ -184,14 +184,16 @@ export default function App() {
                 onClick={() => flip(ch)}
                 style={v({
                   cursor: 'pointer',
-                  fontFamily: "'IBM Plex Mono',monospace", fontWeight: 600,
-                  fontSize: 13, letterSpacing: 2.5,
-                  padding: '4px 2px',
+                  fontFamily: "'IBM Plex Mono',monospace", fontWeight: 700,
+                  fontSize: 16, letterSpacing: 2.5,
+                  padding: '8px 10px',
                   border: 'none',
                   borderBottom: `2px solid ${current === ch ? 'var(--accent)' : 'transparent'}`,
                   background: 'transparent',
-                  color: current === ch ? 'var(--accent)' : 'rgba(150,255,200,.5)',
-                  textShadow: current === ch ? '0 0 10px var(--accent)' : 'none',
+                  color: current === ch ? 'var(--accent)' : 'rgba(180,255,215,.78)',
+                  textShadow: current === ch
+                    ? '0 0 16px var(--accent), 0 0 6px var(--accent)'
+                    : '0 0 8px rgba(77,255,160,.4)',
                   transition: 'all .15s',
                 })}
               >
