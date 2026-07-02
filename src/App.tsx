@@ -182,19 +182,20 @@ export default function App() {
               <button
                 key={ch}
                 onClick={() => flip(ch)}
+                className="nav-tab"
                 style={v({
+                  ['--tab-glow' as string]: current === ch ? '1' : '0.42',
                   cursor: 'pointer',
                   fontFamily: "'IBM Plex Mono',monospace", fontWeight: 700,
                   fontSize: 16, letterSpacing: 2.5,
                   padding: '8px 10px',
                   border: 'none',
-                  borderBottom: `2px solid ${current === ch ? 'var(--accent)' : 'transparent'}`,
                   background: 'transparent',
                   color: current === ch ? 'var(--accent)' : 'rgba(180,255,215,.78)',
                   textShadow: current === ch
                     ? '0 0 16px var(--accent), 0 0 6px var(--accent)'
                     : '0 0 8px rgba(77,255,160,.4)',
-                  transition: 'all .15s',
+                  transition: 'color .15s',
                 })}
               >
                 {TITLES[ch]}

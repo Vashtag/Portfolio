@@ -410,6 +410,40 @@ body::after {
   100% { transform: translate3d(3px, 3px, 0); }
 }
 
+/* Nav tabs: a glowing underbar with a CRT light-sweep shimmer. --tab-glow
+   (set inline per button) controls brightness — dim for inactive, full for
+   the active tab. */
+.nav-tab {
+  position: relative;
+}
+.nav-tab::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(225, 255, 242, 0.85) 50%, transparent 100%),
+    var(--accent);
+  background-size: 220% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  background-position: 200% 0, 0 0;
+  opacity: var(--tab-glow, 0.4);
+  box-shadow: 0 0 6px var(--accent), 0 0 16px var(--accent);
+  animation: tab-shimmer 3s linear infinite;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+.nav-tab:hover::after {
+  opacity: 1;
+}
+@keyframes tab-shimmer {
+  0%   { background-position: 200% 0, 0 0; }
+  100% { background-position: -120% 0, 0 0; }
+}
+
 /* The portfolio's motion (CRT boot, section fade-ins, the rotating brain) is
    core to its design, so by owner's choice these play regardless of the OS
    "reduce motion" setting. We still opt out of smooth-scrolling, which is the
