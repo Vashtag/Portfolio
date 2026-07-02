@@ -27,15 +27,24 @@ export default function Projects({ visible }: { visible: boolean }) {
 
       <div style={{ marginTop: 24, display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: 16 }}>
         {allProjects.map((project) => (
-          <div key={project.name} style={{
-            border: '1px solid rgba(255,106,213,.35)',
-            borderRadius: 10,
-            padding: 18,
-            background: 'rgba(22,6,18,.4)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10,
-          }}>
+          <div
+            key={project.name}
+            onClick={(e) => {
+              // Whole card opens the live page; inner links keep their own targets
+              if ((e.target as HTMLElement).closest('a')) return
+              const url = project.demo ?? project.repo
+              if (url) window.open(url, '_blank', 'noopener')
+            }}
+            style={{
+              border: '1px solid rgba(255,106,213,.35)',
+              borderRadius: 10,
+              padding: 18,
+              background: 'rgba(22,6,18,.4)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 10,
+              cursor: 'pointer',
+            }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ width: 8, height: 8, background: 'var(--accent)', boxShadow: '0 0 8px var(--accent)', display: 'inline-block' }} />
               <span style={{ fontSize: 17, color: '#ffd6f3', fontWeight: 700 }}>{project.name}</span>
@@ -44,16 +53,18 @@ export default function Projects({ visible }: { visible: boolean }) {
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', fontSize: 10, letterSpacing: .5 }}>
               <span style={{ padding: '3px 8px', border: '1px solid rgba(255,106,213,.4)', color: '#ff9fe0' }}>{project.status}</span>
             </div>
-            {project.href && (
-              <a
-                href={project.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ marginTop: 'auto', fontFamily: "'VT323',monospace", fontSize: 19, letterSpacing: 1, color: 'var(--accent)', textDecoration: 'none' }}
-              >
-                ▶ LAUNCH
-              </a>
-            )}
+            <div style={{ marginTop: 'auto', display: 'flex', gap: 18, alignItems: 'center', fontFamily: "'VT323',monospace", fontSize: 19, letterSpacing: 1 }}>
+              {project.demo && (
+                <a href={project.demo} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+                  ▶ LIVE DEMO
+                </a>
+              )}
+              {project.repo && (
+                <a href={project.repo} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,200,238,.7)', textDecoration: 'none' }}>
+                  ◈ CODE
+                </a>
+              )}
+            </div>
           </div>
         ))}
       </div>
