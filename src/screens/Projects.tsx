@@ -27,15 +27,24 @@ export default function Projects({ visible }: { visible: boolean }) {
 
       <div style={{ marginTop: 24, display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: 16 }}>
         {allProjects.map((project) => (
-          <div key={project.name} style={{
-            border: '1px solid rgba(255,106,213,.35)',
-            borderRadius: 10,
-            padding: 18,
-            background: 'rgba(22,6,18,.4)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10,
-          }}>
+          <div
+            key={project.name}
+            onClick={(e) => {
+              // Whole card opens the live page; inner links keep their own targets
+              if ((e.target as HTMLElement).closest('a')) return
+              const url = project.demo ?? project.repo
+              if (url) window.open(url, '_blank', 'noopener')
+            }}
+            style={{
+              border: '1px solid rgba(255,106,213,.35)',
+              borderRadius: 10,
+              padding: 18,
+              background: 'rgba(22,6,18,.4)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 10,
+              cursor: 'pointer',
+            }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ width: 8, height: 8, background: 'var(--accent)', boxShadow: '0 0 8px var(--accent)', display: 'inline-block' }} />
               <span style={{ fontSize: 17, color: '#ffd6f3', fontWeight: 700 }}>{project.name}</span>
