@@ -44,16 +44,18 @@ export default function Projects({ visible }: { visible: boolean }) {
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', fontSize: 10, letterSpacing: .5 }}>
               <span style={{ padding: '3px 8px', border: '1px solid rgba(255,106,213,.4)', color: '#ff9fe0' }}>{project.status}</span>
             </div>
-            {project.href && (
-              <a
-                href={project.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ marginTop: 'auto', fontFamily: "'VT323',monospace", fontSize: 19, letterSpacing: 1, color: 'var(--accent)', textDecoration: 'none' }}
-              >
-                ▶ LAUNCH
-              </a>
-            )}
+            <div style={{ marginTop: 'auto', display: 'flex', gap: 18, alignItems: 'center', fontFamily: "'VT323',monospace", fontSize: 19, letterSpacing: 1 }}>
+              {project.demo && (
+                <a href={project.demo} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+                  ▶ LIVE DEMO
+                </a>
+              )}
+              {project.repo && (
+                <a href={project.repo} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,200,238,.7)', textDecoration: 'none' }}>
+                  ◈ CODE
+                </a>
+              )}
+            </div>
           </div>
         ))}
       </div>

@@ -29,8 +29,8 @@ export const bio = {
   quote:
     'The goal is not just to understand the brain, but to build tools that think with the same elegance and economy as the human mind.',
   stats: [
-    { id: 'STAT_01', value: '12+', label: 'PAPERS', fill: 0.75, accent: 'primary' as const },
-    { id: 'STAT_02', value: '08', label: 'COURSES', fill: 0.5, accent: 'secondary' as const },
+    { id: 'STAT_01', value: '04', label: 'DEGREES', fill: 1, accent: 'primary' as const },
+    { id: 'STAT_02', value: '300+', label: 'LEARNERS / TERM', fill: 0.8, accent: 'secondary' as const },
   ],
 }
 
@@ -80,7 +80,8 @@ export type Project = {
   blurb: string
   status: string
   statusTone: 'good' | 'warn' | 'bad'
-  href?: string
+  demo?: string
+  repo?: string
   icon: string
 }
 
@@ -88,39 +89,25 @@ export const projectsHeading = 'Active_Repo'
 
 // The first project renders as the large featured card.
 export const featuredProject: Project = {
-  name: 'SYNAPSE_CORE',
+  name: '3DVIEWER',
   blurb:
-    'A toolkit for building and exploring neural models — designed to make computational neuroscience approachable for students and researchers alike.',
-  status: 'STATUS: PRODUCTION',
+    'A browser-based viewer for exploring interactive anatomical 3D models — rotate, zoom, and inspect structures right in the page.',
+  status: 'LIVE',
   statusTone: 'good',
-  href: links.github,
-  icon: 'hub',
+  demo: 'https://vashtag.github.io/3DViewer/',
+  repo: 'https://github.com/Vashtag/3DViewer',
+  icon: 'view_in_ar',
 }
 
 export const projects: Project[] = [
   {
-    name: 'NEURO_DEC',
-    blurb: 'Tooling for cleaning and decoding neural signal data.',
-    status: 'STABLE',
+    name: 'FARSI',
+    blurb: 'A playful web app for learning Farsi (Persian) — pairs words with audio and images to build vocabulary. Built as a gift to help a friend learn.',
+    status: 'LIVE',
     statusTone: 'good',
-    href: links.github,
-    icon: 'memory',
-  },
-  {
-    name: 'SPIKE_UI',
-    blurb: 'Dashboard for interactive data visualization.',
-    status: 'LEGACY',
-    statusTone: 'bad',
-    href: links.github,
-    icon: 'folder_zip',
-  },
-  {
-    name: 'MIND_MAPPER',
-    blurb: 'Interactive 3D visualization of connectivity matrices using Three.js.',
-    status: 'DEMO',
-    statusTone: 'warn',
-    href: links.github,
-    icon: 'graph_3',
+    demo: 'https://vashtag.github.io/Farsi/',
+    repo: 'https://github.com/Vashtag/Farsi',
+    icon: 'translate',
   },
 ]
 

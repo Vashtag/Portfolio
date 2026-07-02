@@ -58,7 +58,7 @@ export default function Projects() {
                 <Icon name="description" className="cursor-pointer hover:text-primary-fixed-dim transition-colors" />
               </div>
               <a
-                href={featuredProject.href ?? links.github}
+                href={featuredProject.repo ?? featuredProject.demo ?? links.github}
                 target="_blank"
                 rel="noreferrer"
                 className="font-label-caps text-label-caps px-4 py-2 bg-primary-fixed-dim text-background font-bold active:scale-95 transition-all hover:shadow-[0_0_15px_var(--primary-glow)]"
@@ -73,7 +73,7 @@ export default function Projects() {
         {projects.slice(0, 2).map((p) => (
           <a
             key={p.name}
-            href={p.href ?? links.github}
+            href={p.demo ?? p.repo ?? links.github}
             target="_blank"
             rel="noreferrer"
             className="border border-outline-variant p-6 hover:bg-surface-container-low transition-colors block"
@@ -102,7 +102,7 @@ export default function Projects() {
               <h4 className="font-label-caps text-label-caps text-primary-fixed-dim mb-1">{p.name}</h4>
               <p className="text-body-md text-on-surface-variant mb-4">{p.blurb}</p>
               <a
-                href={p.href ?? links.github}
+                href={p.demo ?? p.repo ?? links.github}
                 target="_blank"
                 rel="noreferrer"
                 className="text-code-sm underline decoration-outline hover:text-primary-fixed-dim"

@@ -76,6 +76,9 @@ export default function App() {
   const flip = useCallback((ch: Channel) => {
     if (busy.current || ch === current) return
     busy.current = true
+    // Log the channel as a page view (GoatCounter, if configured — no-ops otherwise)
+    const gc = (window as unknown as { goatcounter?: { count?: (o: object) => void } }).goatcounter
+    gc?.count?.({ path: `/${ch}`, title: `NEURO.SYS — ${TITLES[ch]}`, event: false })
     setGlitchOn(true)
     setStageFlip('nav-crt-off')
     setTimeout(() => { setCurrent(ch); setStageFlip('nav-crt-on') }, 205)

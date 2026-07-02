@@ -27,6 +27,14 @@ export default function EegPanel() {
     let raf = 0
     let running = false
 
+    // Interactivity: cursor movement raises "arousal" (0..1), which speeds up
+    // and energizes the traces and adds beta-band activity. It decays back to a
+    // calm resting rhythm when the cursor is idle.
+    let arousal = 0
+    let lastX = 0
+    let lastY = 0
+    let hasLast = false
+
     const resize = () => {
       dpr = Math.min(2, window.devicePixelRatio || 1)
       width = Math.max(1, canvas.clientWidth * dpr)
@@ -40,6 +48,8 @@ export default function EegPanel() {
 
     const loop = () => {
       tick += 1
+      arousal *= 0.96 // decay toward calm when the cursor is still
+
       ctx.clearRect(0, 0, width, height)
 
       // Grid lines — single batched path
@@ -51,17 +61,20 @@ export default function EegPanel() {
       ctx.stroke()
 
       const rowHeight = height / rows.length
+      const speedMul = 1 + arousal * 2.6
+      const ampMul = 1 + arousal * 0.85
       ctx.lineWidth = 1.6 * dpr
-      // Set font once outside the per-row loop
       ctx.font = `${11 * dpr}px monospace`
 
       rows.forEach((row, index) => {
         const centerY = rowHeight * (index + 0.5)
+        const s = row.speed * speedMul
         let value =
-          Math.sin(tick * row.speed + row.phase) * row.amp +
-          Math.sin(tick * row.speed * 2.3 + 1) * row.amp * 0.45 +
-          (Math.random() - 0.5) * row.amp * 0.5
-        if (Math.random() < 0.012) value += (Math.random() < 0.5 ? 1 : -1) * row.amp * 2.6
+          Math.sin(tick * s + row.phase) * row.amp * ampMul +
+          Math.sin(tick * s * 2.3 + 1) * row.amp * 0.45 * ampMul +
+          Math.sin(tick * s * 5.5 + index) * row.amp * arousal * 0.5 + // beta band, only when aroused
+          (Math.random() - 0.5) * row.amp * 0.5 * (1 + arousal)
+        if (Math.random() < 0.012 + arousal * 0.05) value += (Math.random() < 0.5 ? 1 : -1) * row.amp * 2.6
 
         // O(1) circular buffer write
         bufs[index][heads[index]] = value
@@ -86,6 +99,12 @@ export default function EegPanel() {
         ctx.fillText(row.name, 6 * dpr, centerY - rowHeight * 0.3)
       })
 
+      // Live state readout (bottom-left), colour-coded by arousal
+      const state = arousal > 0.4 ? 'FOCUSED' : arousal > 0.14 ? 'ALERT' : 'RESTING'
+      ctx.fillStyle = arousal > 0.4 ? '#7dffb0' : arousal > 0.14 ? '#ffe08a' : 'rgba(120,220,255,0.7)'
+      ctx.font = `${12 * dpr}px monospace`
+      ctx.fillText(`STATE: ${state}`, 6 * dpr, height - 7 * dpr)
+
       if (running) raf = requestAnimationFrame(loop)
     }
 
@@ -98,6 +117,20 @@ export default function EegPanel() {
       running = false
       cancelAnimationFrame(raf)
     }
+
+    const onPointerMove = (e: PointerEvent) => {
+      const r = canvas.getBoundingClientRect()
+      const x = e.clientX - r.left
+      const y = e.clientY - r.top
+      if (hasLast) {
+        const d = Math.hypot(x - lastX, y - lastY)
+        arousal = Math.min(1, arousal + d / 220)
+      }
+      lastX = x
+      lastY = y
+      hasLast = true
+    }
+    const onPointerLeave = () => { hasLast = false }
 
     resize()
     // Draw only while visible. This also re-sizes on first reveal — the panel
@@ -112,12 +145,16 @@ export default function EegPanel() {
     })
     io.observe(canvas)
     window.addEventListener('resize', resize)
+    canvas.addEventListener('pointermove', onPointerMove)
+    canvas.addEventListener('pointerleave', onPointerLeave)
     return () => {
       stop()
       io.disconnect()
       window.removeEventListener('resize', resize)
+      canvas.removeEventListener('pointermove', onPointerMove)
+      canvas.removeEventListener('pointerleave', onPointerLeave)
     }
   }, [])
 
-  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden="true" />
+  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden="true" style={{ cursor: 'crosshair' }} />
 }
