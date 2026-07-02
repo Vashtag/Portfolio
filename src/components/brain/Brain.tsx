@@ -33,21 +33,29 @@ const CEREBRUM: Segment[] = [
   ['C', 8, 41, 8, 40, 8, 40],
   ['Z'],
 ]
-// Cerebellum — nestled below the occipital lobe, behind the brainstem
+// Cerebellum — tucked up under the occipital lobe, with a lobulated lower
+// margin (the cerebellar lobules bulge out) rather than a smooth oval
 const CEREBELLUM: Segment[] = [
-  ['M', 68, 58],
-  ['C', 76, 55, 85, 58, 89, 65],
-  ['C', 92, 71, 90, 79, 83, 82],
-  ['C', 75, 84, 65, 80, 62, 72],
-  ['C', 59, 65, 61, 59, 68, 58],
+  ['M', 62, 58],
+  ['C', 67, 55, 73, 53, 79, 54],   // top edge, tucking under the occipital
+  ['C', 84, 55, 88, 58, 90, 64],   // back-upper, rounding out
+  ['C', 91, 69, 90, 74, 87, 77],   // back-outer
+  ['C', 85, 80, 83, 80, 81, 79],   // lobule 1
+  ['C', 79, 82, 76, 82, 74, 80],   // lobule 2
+  ['C', 72, 82, 69, 82, 67, 79],   // lobule 3
+  ['C', 65, 77, 63, 75, 62, 71],   // front-bottom rising toward the stem
+  ['C', 61, 67, 59, 62, 62, 58],
   ['Z'],
 ]
-// Brainstem — descends forward of the cerebellum
+// Brainstem — thick where it joins the brain, tapering down and forward
 const STEM: Segment[] = [
-  ['M', 60, 62],
-  ['C', 58, 69, 57, 78, 59, 85],
-  ['C', 60, 89, 64, 89, 65, 84],
-  ['C', 66, 77, 65, 68, 65, 63],
+  ['M', 64, 59],
+  ['C', 63, 65, 62, 72, 60, 79],
+  ['C', 59, 83, 58, 86, 56, 86],
+  ['C', 55, 85, 55, 83, 55, 80],
+  ['C', 55, 72, 55, 65, 56, 59],
+  ['C', 58, 58, 62, 58, 64, 59],
+  ['Z'],
 ]
 // Lateral sulcus (Sylvian fissure) — deep cleft separating the temporal lobe
 // (below) from the frontal and parietal lobes (above)
@@ -268,11 +276,15 @@ export default function Brain() {
       s.fillRect(0, 0, width, height)
       s.lineWidth = 1 * dpr
       s.strokeStyle = rgba(accent, 0.32)
+      // Cerebellar folia — arced lines that bow up in the middle and tilt down
+      // to the right, following the rounded form (clipped to the cerebellum)
       s.beginPath()
-      for (let y = 58; y <= 82; y += 2) {
-        for (let t = 0; t <= 12; t += 1) {
-          const x = 60 + ((90 - 60) * t) / 12
-          const p = point(x, y + Math.sin(t * 0.85 + y) * 0.5)
+      for (let yb = 57.5; yb <= 80; yb += 2.3) {
+        for (let t = 0; t <= 16; t += 1) {
+          const u = t / 16
+          const x = 60 + 30 * u
+          const y = yb + 1.6 * u - 1.1 * Math.sin(Math.PI * u)
+          const p = point(x, y)
           t === 0 ? s.moveTo(p.x, p.y) : s.lineTo(p.x, p.y)
         }
       }
