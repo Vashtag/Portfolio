@@ -25,6 +25,7 @@ export default function EegPanel() {
     let bufs: Float32Array[] = []
     let heads: number[] = []
     let raf = 0
+    let running = false
 
     const resize = () => {
       dpr = Math.min(2, window.devicePixelRatio || 1)
@@ -85,14 +86,35 @@ export default function EegPanel() {
         ctx.fillText(row.name, 6 * dpr, centerY - rowHeight * 0.3)
       })
 
+      if (running) raf = requestAnimationFrame(loop)
+    }
+
+    const start = () => {
+      if (running) return
+      running = true
       raf = requestAnimationFrame(loop)
+    }
+    const stop = () => {
+      running = false
+      cancelAnimationFrame(raf)
     }
 
     resize()
-    raf = requestAnimationFrame(loop)
+    // Draw only while visible. This also re-sizes on first reveal — the panel
+    // mounts inside a hidden tab, so the initial resize() sees a 0-width canvas.
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        if (Math.floor(canvas.clientWidth * dpr) !== canvas.width) resize()
+        start()
+      } else {
+        stop()
+      }
+    })
+    io.observe(canvas)
     window.addEventListener('resize', resize)
     return () => {
-      cancelAnimationFrame(raf)
+      stop()
+      io.disconnect()
       window.removeEventListener('resize', resize)
     }
   }, [])

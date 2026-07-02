@@ -406,8 +406,8 @@ body::after {
   100% { opacity: 0; }
 }
 @keyframes dotdrift {
-  0%   { background-position: 0 0; }
-  100% { background-position: 3px 3px; }
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(3px, 3px, 0); }
 }
 
 /* The portfolio's motion (CRT boot, section fade-ins, the rotating brain) is
