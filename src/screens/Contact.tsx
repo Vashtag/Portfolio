@@ -16,6 +16,7 @@ const contactItems = [
   { label: '▸ EMAIL', value: 'sizadiso@uwaterloo.ca', href: 'mailto:sizadiso@uwaterloo.ca' },
   { label: '▸ GITHUB', value: 'github.com/vashtag', href: links.github },
   { label: '▸ LINKEDIN', value: 'linkedin.com/in/siyavash-izadi', href: links.linkedin },
+  { label: '▸ YOUTUBE', value: 'youtube.com/@vashtag', href: links.youtube },
 ]
 
 export default function Contact({ visible }: { visible: boolean }) {
