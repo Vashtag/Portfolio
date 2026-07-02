@@ -94,8 +94,9 @@ export default function Brain() {
     let nodes: Node[] = []
     let edges: Array<[number, number]> = []
     let pulses: Pulse[] = []
-    let gyriCanvas: OffscreenCanvas | null = null
+    let staticCanvas: OffscreenCanvas | null = null
     let raf = 0
+    let running = false
 
     const point = (x: number, y: number): Point => ({ x: ox + x * scale, y: oy + y * scale })
     const pathFrom = (segments: Segment[]) => {
@@ -115,19 +116,19 @@ export default function Brain() {
       })
       return path
     }
-    const trace = (segments: Segment[]) => {
-      ctx.beginPath()
+    const trace = (c: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D, segments: Segment[]) => {
+      c.beginPath()
       segments.forEach((segment) => {
         if (segment[0] === 'M') {
           const p = point(segment[1], segment[2])
-          ctx.moveTo(p.x, p.y)
+          c.moveTo(p.x, p.y)
         } else if (segment[0] === 'C') {
           const a = point(segment[1], segment[2])
           const b = point(segment[3], segment[4])
-          const c = point(segment[5], segment[6])
-          ctx.bezierCurveTo(a.x, a.y, b.x, b.y, c.x, c.y)
+          const cp = point(segment[5], segment[6])
+          c.bezierCurveTo(a.x, a.y, b.x, b.y, cp.x, cp.y)
         } else {
-          ctx.closePath()
+          c.closePath()
         }
       })
     }
@@ -163,29 +164,6 @@ export default function Brain() {
       cerebellum = pathFrom(CEREBELLUM)
       stem = pathFrom(STEM)
 
-      // Pre-render gyri to an offscreen canvas — blitted each frame instead of re-tracing
-      const accent = '#4dffa0'
-      gyriCanvas = new OffscreenCanvas(width, height)
-      const gCtx = gyriCanvas.getContext('2d')!
-      gCtx.save()
-      gCtx.clip(cortex)
-      gCtx.fillStyle = rgba(accent, 0.055)
-      gCtx.fillRect(0, 0, width, height)
-      gCtx.lineWidth = 1.3 * dpr
-      gCtx.lineCap = 'round'
-      gCtx.strokeStyle = rgba(accent, 0.24)
-      gCtx.shadowColor = accent
-      gCtx.shadowBlur = 4 * dpr
-      GYRI.forEach((gyrus) => {
-        gCtx.beginPath()
-        gyrus.forEach((seg) => {
-          if (seg[0] === 'M') { const p = point(seg[1], seg[2]); gCtx.moveTo(p.x, p.y) }
-          else if (seg[0] === 'C') { const a = point(seg[1], seg[2]), b = point(seg[3], seg[4]), c = point(seg[5], seg[6]); gCtx.bezierCurveTo(a.x, a.y, b.x, b.y, c.x, c.y) }
-        })
-        gCtx.stroke()
-      })
-      gCtx.restore()
-
       nodes = []
       const gap = width * 0.045
       GYRI.flatMap(sample).forEach((p) => {
@@ -214,6 +192,71 @@ export default function Brain() {
           })
       })
       pulses = []
+
+      // Bake ALL static geometry — cortex fill, gyri, edges, fissure, cerebellum
+      // stripes, and the glowing outlines — into one offscreen canvas. Per frame
+      // this becomes a single drawImage; only nodes and pulses are drawn live.
+      // (The outline strokes with 14dpr shadow blur were the most expensive
+      // per-frame calls, and none of this geometry ever moves.)
+      const accent = '#4dffa0'
+      staticCanvas = new OffscreenCanvas(width, height)
+      const s = staticCanvas.getContext('2d')!
+      s.save()
+      s.clip(cortex)
+      s.fillStyle = rgba(accent, 0.055)
+      s.fillRect(0, 0, width, height)
+      s.lineWidth = 1.3 * dpr
+      s.lineCap = 'round'
+      s.strokeStyle = rgba(accent, 0.24)
+      s.shadowColor = accent
+      s.shadowBlur = 4 * dpr
+      GYRI.forEach((gyrus) => {
+        trace(s, gyrus)
+        s.stroke()
+      })
+      s.shadowBlur = 0
+      s.lineWidth = 1 * dpr
+      s.strokeStyle = rgba(accent, 0.14)
+      s.beginPath()
+      edges.forEach(([a, b]) => {
+        s.moveTo(nodes[a].x, nodes[a].y)
+        s.lineTo(nodes[b].x, nodes[b].y)
+      })
+      s.stroke()
+      s.lineWidth = 2 * dpr
+      s.strokeStyle = rgba(accent, 0.52)
+      s.shadowColor = accent
+      s.shadowBlur = 5 * dpr
+      trace(s, FISSURE)
+      s.stroke()
+      s.restore()
+
+      s.save()
+      s.clip(cerebellum)
+      s.fillStyle = rgba(accent, 0.06)
+      s.fillRect(0, 0, width, height)
+      s.lineWidth = 1 * dpr
+      s.strokeStyle = rgba(accent, 0.32)
+      s.beginPath()
+      for (let y = 64; y <= 80; y += 2) {
+        for (let t = 0; t <= 12; t += 1) {
+          const x = 62 + ((84 - 62) * t) / 12
+          const p = point(x, y + Math.sin(t * 0.85 + y) * 0.5)
+          t === 0 ? s.moveTo(p.x, p.y) : s.lineTo(p.x, p.y)
+        }
+      }
+      s.stroke()
+      s.restore()
+
+      s.lineJoin = 'round'
+      s.strokeStyle = accent
+      s.shadowColor = accent
+      s.shadowBlur = 14 * dpr
+      s.lineWidth = 2.2 * dpr
+      s.stroke(cortex)
+      s.lineWidth = 1.8 * dpr
+      s.stroke(cerebellum)
+      s.stroke(stem)
     }
 
     const resize = () => {
@@ -242,23 +285,10 @@ export default function Brain() {
       const accent = '#4dffa0'
       ctx.clearRect(0, 0, width, height)
 
-      // Blit pre-rendered gyri (avoids re-tracing 13 bezier paths every frame)
-      if (gyriCanvas) ctx.drawImage(gyriCanvas, 0, 0)
+      // All static geometry in one blit
+      if (staticCanvas) ctx.drawImage(staticCanvas, 0, 0)
 
-      ctx.save()
-      ctx.clip(cortex)
-
-      // Batch all edges into a single path — one GPU flush instead of ~75
-      ctx.lineWidth = 1 * dpr
-      ctx.strokeStyle = rgba(accent, 0.14)
-      ctx.beginPath()
-      edges.forEach(([a, b]) => {
-        ctx.moveTo(nodes[a].x, nodes[a].y)
-        ctx.lineTo(nodes[b].x, nodes[b].y)
-      })
-      ctx.stroke()
-
-      // Advance pulses, collect done indices
+      // Pulses — shadow state set once for all of them
       const donePulses: number[] = []
       ctx.fillStyle = accent
       ctx.shadowColor = accent
@@ -271,13 +301,11 @@ export default function Brain() {
         ctx.arc(a.x + (b.x - a.x) * pulse.t, a.y + (b.y - a.y) * pulse.t, 2.1 * dpr, 0, Math.PI * 2)
         ctx.fill()
       })
-      // Remove done pulses back-to-front to keep indices valid
       for (let i = donePulses.length - 1; i >= 0; i--) pulses.splice(donePulses[i], 1)
 
       // Nodes: one pass without shadow (ambient), one pass with shadow (firing)
       ctx.shadowBlur = 0
       nodes.forEach((node) => { node.fire *= 0.94 })
-      // Pass 1 — dim ambient nodes, no shadow
       nodes.forEach((node) => {
         if (node.fire >= 0.08) return
         const base = 0.5 + 0.5 * Math.sin(time * 0.002 + node.phase)
@@ -286,7 +314,6 @@ export default function Brain() {
         ctx.arc(node.x, node.y, (1.25 + base) * dpr, 0, Math.PI * 2)
         ctx.fill()
       })
-      // Pass 2 — firing nodes with glow (minimal shadowBlur state changes)
       ctx.shadowColor = accent
       nodes.forEach((node) => {
         if (node.fire < 0.08) return
@@ -297,55 +324,38 @@ export default function Brain() {
         ctx.arc(node.x, node.y, (1.25 + base + node.fire * 2.5) * dpr, 0, Math.PI * 2)
         ctx.fill()
       })
-
-      // Fissure — single shadow set
-      ctx.shadowBlur = 5 * dpr
-      ctx.lineWidth = 2 * dpr
-      ctx.strokeStyle = rgba(accent, 0.52)
-      trace(FISSURE)
-      ctx.stroke()
-      ctx.restore()
-
-      // Cerebellum stripes
-      ctx.save()
-      ctx.clip(cerebellum)
-      ctx.shadowBlur = 0
-      ctx.fillStyle = rgba(accent, 0.06)
-      ctx.fillRect(0, 0, width, height)
-      ctx.lineWidth = 1 * dpr
-      ctx.strokeStyle = rgba(accent, 0.32)
-      ctx.beginPath()
-      for (let y = 64; y <= 80; y += 2) {
-        for (let s = 0; s <= 12; s += 1) {
-          const x = 62 + ((84 - 62) * s) / 12
-          const p = point(x, y + Math.sin(s * 0.85 + y) * 0.5)
-          s === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)
-        }
-      }
-      ctx.stroke()
-      ctx.restore()
-
-      // Outlines — single shadowBlur for all three
-      ctx.lineJoin = 'round'
-      ctx.strokeStyle = accent
-      ctx.shadowColor = accent
-      ctx.shadowBlur = 14 * dpr
-      ctx.lineWidth = 2.2 * dpr
-      ctx.stroke(cortex)
-      ctx.lineWidth = 1.8 * dpr
-      ctx.stroke(cerebellum)
-      ctx.stroke(stem)
       ctx.shadowBlur = 0
 
       if (Math.random() < 0.07) fire()
+      if (running) raf = requestAnimationFrame(loop)
+    }
+
+    const start = () => {
+      if (running) return
+      running = true
       raf = requestAnimationFrame(loop)
+    }
+    const stop = () => {
+      running = false
+      cancelAnimationFrame(raf)
     }
 
     resize()
-    raf = requestAnimationFrame(loop)
+    // Pause the animation entirely while the canvas is hidden (channel switched
+    // away) — no reason to draw frames nobody can see.
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        if (Math.floor(canvas.clientWidth * dpr) !== canvas.width) resize()
+        start()
+      } else {
+        stop()
+      }
+    })
+    io.observe(canvas)
     window.addEventListener('resize', resize)
     return () => {
-      cancelAnimationFrame(raf)
+      stop()
+      io.disconnect()
       window.removeEventListener('resize', resize)
     }
   }, [])

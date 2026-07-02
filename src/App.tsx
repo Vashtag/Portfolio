@@ -228,13 +228,17 @@ export default function App() {
           {/* Scanlines */}
           <div style={v({ position: 'absolute', inset: 0, zIndex: 40, pointerEvents: 'none', background: 'repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.16) 3px,rgba(0,0,0,.16) 4px)', backgroundSize: '100% 4px' })} />
           {/* Dot drift */}
-          <div style={v({ position: 'absolute', inset: 0, zIndex: 41, pointerEvents: 'none', background: 'radial-gradient(circle,rgba(0,0,0,0) 0%,rgba(0,0,0,0) 32%,rgba(0,0,0,.5) 80%)', backgroundSize: '3px 3px', mixBlendMode: 'multiply', opacity: .55, animation: 'dotdrift 8s linear infinite' })} />
+          {/* transform (GPU-composited) instead of background-position (full repaint);
+              multiply blend dropped — with pure-black dots it's identical to normal alpha */}
+          <div style={v({ position: 'absolute', inset: 0, zIndex: 41, pointerEvents: 'none', overflow: 'hidden' })}>
+            <div style={v({ position: 'absolute', inset: -3, background: 'radial-gradient(circle,rgba(0,0,0,0) 0%,rgba(0,0,0,0) 32%,rgba(0,0,0,.5) 80%)', backgroundSize: '3px 3px', opacity: .55, animation: 'dotdrift 8s linear infinite', willChange: 'transform' })} />
+          </div>
           {/* Vignette */}
           <div style={v({ position: 'absolute', inset: 0, zIndex: 42, pointerEvents: 'none', borderRadius: 6, boxShadow: 'inset 0 0 100px 18px rgba(0,0,0,.7),inset 0 0 30px rgba(0,0,0,.5)' })} />
           {/* CRT glass bulge — convex highlight simulating curved phosphor glass */}
-          <div style={v({ position: 'absolute', inset: 0, zIndex: 43, pointerEvents: 'none', borderRadius: 6, background: 'radial-gradient(ellipse 90% 75% at 50% 38%, rgba(255,255,255,.028) 0%, rgba(255,255,255,.010) 38%, transparent 68%), radial-gradient(ellipse 55% 35% at 50% 12%, rgba(255,255,255,.032) 0%, transparent 100%)', mixBlendMode: 'screen' })} />
+          <div style={v({ position: 'absolute', inset: 0, zIndex: 43, pointerEvents: 'none', borderRadius: 6, background: 'radial-gradient(ellipse 90% 75% at 50% 38%, rgba(255,255,255,.028) 0%, rgba(255,255,255,.010) 38%, transparent 68%), radial-gradient(ellipse 55% 35% at 50% 12%, rgba(255,255,255,.032) 0%, transparent 100%)' })} />
           {/* Flicker */}
-          <div style={v({ position: 'absolute', inset: 0, zIndex: 43, pointerEvents: 'none', background: '#7dffb0', mixBlendMode: 'overlay', animation: 'flick 7s infinite' })} />
+          <div style={v({ position: 'absolute', inset: 0, zIndex: 43, pointerEvents: 'none', background: '#7dffb0', opacity: .02, animation: 'flick 7s infinite' })} />
           {/* Glitch – channel-switch burst */}
           {glitchOn && (
             <div style={v({ position: 'absolute', inset: 0, zIndex: 44, pointerEvents: 'none', background: 'repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 1px,transparent 1px 3px),linear-gradient(90deg,rgba(255,40,120,.25),transparent 40%,rgba(50,200,255,.25))', animation: 'staticburst .45s steps(3) forwards' })} />
