@@ -44,9 +44,19 @@ export default function App() {
   const [bootDone, setBootDone]   = useState(false)
   const [bootText, setBootText]   = useState('')
   const [clock, setClock]         = useState('')
+  const [isMobile, setIsMobile]   = useState(false)
   const busy = useRef(false)
 
   const accent = ACCENTS[current]
+
+  /* ── mobile breakpoint (declutters the top bar / nav only on phones) ──── */
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
 
   /* ── clock ────────────────────────────────────────────────────────── */
   useEffect(() => {
@@ -148,22 +158,26 @@ export default function App() {
           {/* ── TOP BAR ──────────────────────────────────────────────────── */}
           <div style={v({
             position: 'relative', zIndex: 20,
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-            padding: '6px clamp(14px,2vw,26px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            gap: isMobile ? 8 : 12,
+            padding: isMobile ? '6px 12px' : '6px clamp(14px,2vw,26px)',
             borderBottom: '1px solid rgba(77,255,160,.22)',
             background: 'linear-gradient(180deg,rgba(77,255,160,.07),transparent)',
           })}>
-            <div style={v({ display: 'flex', alignItems: 'center', gap: 10, fontFamily: "'VT323',monospace", fontSize: 22, letterSpacing: 1, color: 'var(--accent)' })}>
+            <div style={v({ display: 'flex', alignItems: 'center', gap: isMobile ? 7 : 10, fontFamily: "'VT323',monospace", fontSize: isMobile ? 18 : 22, letterSpacing: 1, color: 'var(--accent)' })}>
               <span style={{ width: 9, height: 9, borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 10px var(--accent)', display: 'inline-block', animation: 'blink 1.6s steps(1) infinite' }} />
               NEURO.SYS
             </div>
             <div style={v({ display: 'flex', alignItems: 'center', gap: 16 })}>
-              <div style={v({ fontFamily: "'VT323',monospace", fontSize: 20, color: 'rgba(140,255,195,.75)' })}>{clock}</div>
-              <div style={v({ fontFamily: "'VT323',monospace", fontSize: 23, letterSpacing: 2, color: '#bfffd9', textShadow: '0 0 8px var(--accent)' })}>{chLabel(current)}</div>
+              <div style={v({ fontFamily: "'VT323',monospace", fontSize: isMobile ? 16 : 20, color: 'rgba(140,255,195,.75)' })}>{clock}</div>
+              {/* Channel label is redundant with the highlighted tab on mobile — hide it there */}
+              {!isMobile && (
+                <div style={v({ fontFamily: "'VT323',monospace", fontSize: 23, letterSpacing: 2, color: '#bfffd9', textShadow: '0 0 8px var(--accent)' })}>{chLabel(current)}</div>
+              )}
             </div>
             <button
               onClick={() => flip('about')}
-              style={v({ cursor: 'pointer', fontFamily: "'VT323',monospace", fontSize: 20, letterSpacing: 2, color: current === 'about' ? 'var(--accent)' : 'rgba(140,255,195,.7)', background: 'none', border: `1px solid ${current === 'about' ? 'var(--accent)' : 'rgba(77,255,160,.3)'}`, borderRadius: 4, padding: '2px 12px', textShadow: current === 'about' ? '0 0 10px var(--accent)' : 'none', transition: 'all .15s' })}
+              style={v({ cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: "'VT323',monospace", fontSize: isMobile ? 16 : 20, letterSpacing: isMobile ? 1 : 2, color: current === 'about' ? 'var(--accent)' : 'rgba(140,255,195,.7)', background: 'none', border: `1px solid ${current === 'about' ? 'var(--accent)' : 'rgba(77,255,160,.3)'}`, borderRadius: 4, padding: isMobile ? '2px 8px' : '2px 12px', textShadow: current === 'about' ? '0 0 10px var(--accent)' : 'none', transition: 'all .15s' })}
             >
               ABOUT ME
             </button>
@@ -172,8 +186,10 @@ export default function App() {
           {/* ── NAV TABS ─────────────────────────────────────────────────── */}
           <div style={v({
             position: 'relative', zIndex: 20,
-            display: 'flex', alignItems: 'center', gap: 'clamp(16px,3vw,38px)',
-            padding: '7px clamp(14px,2vw,26px)',
+            display: 'flex', alignItems: 'center',
+            justifyContent: isMobile ? 'space-between' : 'flex-start',
+            gap: isMobile ? '4px' : 'clamp(16px,3vw,38px)',
+            padding: isMobile ? '6px 12px' : '7px clamp(14px,2vw,26px)',
             borderBottom: '1px solid rgba(77,255,160,.22)',
             background: 'linear-gradient(180deg,rgba(77,255,160,.06),transparent)',
             flexWrap: 'wrap',
@@ -187,8 +203,9 @@ export default function App() {
                   ['--tab-glow' as string]: current === ch ? '1' : '0.42',
                   cursor: 'pointer',
                   fontFamily: "'IBM Plex Mono',monospace", fontWeight: 700,
-                  fontSize: 16, letterSpacing: 2.5,
-                  padding: '8px 10px',
+                  fontSize: isMobile ? 12.5 : 16,
+                  letterSpacing: isMobile ? 1 : 2.5,
+                  padding: isMobile ? '7px 4px' : '8px 10px',
                   border: 'none',
                   background: 'transparent',
                   color: current === ch ? 'var(--accent)' : 'rgba(180,255,215,.78)',
@@ -201,9 +218,12 @@ export default function App() {
                 {TITLES[ch]}
               </button>
             ))}
+            {/* Keyboard-shortcut hint is meaningless on touch — desktop only */}
+            {!isMobile && (
             <div style={v({ marginLeft: 'auto', fontFamily: "'VT323',monospace", fontSize: 18, letterSpacing: 1, color: 'rgba(125,255,176,.45)' })}>
               ⌂ ABOUT ME · 1–4 · ◄ ►
             </div>
+            )}
           </div>
 
           {/* ── STAGE ────────────────────────────────────────────────────── */}
