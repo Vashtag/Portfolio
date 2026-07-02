@@ -6,65 +6,69 @@ type Pulse = { a: number; b: number; t: number }
 type Segment = ['M', number, number] | ['C', number, number, number, number, number, number] | ['Z']
 
 // Lateral (left-hemisphere) view. Coordinate space 96 × 90, centred at (48, 44).
-// Frontal pole is lower-left; occipital pole is right; temporal lobe hangs below.
+// Frontal pole is left; occipital pole is right; the temporal pole projects
+// forward-and-down at the front-bottom — the signature of a real lateral view.
 const CEREBRUM: Segment[] = [
-  ['M', 14, 55],
-  ['C', 5, 47, 4, 29, 10, 17],    // frontal pole, bulbous curve
-  ['C', 15, 5, 28, 2, 42, 2],     // superior frontal
-  ['C', 57, 2, 69, 7, 77, 16],    // parietal superior
-  ['C', 85, 23, 89, 35, 88, 47],  // occipital slope
-  ['C', 87, 57, 81, 64, 71, 67],  // posterior inferior
-  ['C', 61, 69, 50, 70, 44, 71],  // temporal-parietal junction
-  ['C', 32, 73, 19, 69, 15, 62],  // temporal lobe
-  ['C', 14, 59, 14, 57, 14, 55],
+  ['M', 9, 42],                    // frontal pole (frontmost point, left)
+  ['C', 8, 31, 11, 19, 20, 12],    // rise up the convex frontal lobe
+  ['C', 28, 6, 39, 4, 49, 4],      // superior frontal → vertex (crown)
+  ['C', 60, 4, 70, 8, 78, 15],     // parietal crown sloping back
+  ['C', 85, 21, 89, 30, 89, 39],   // up to occipital pole (backmost point)
+  ['C', 89, 46, 86, 51, 80, 54],   // occipital pole rounding down
+  ['C', 75, 56, 71, 56, 67, 58],   // dip into the preoccipital notch
+  ['C', 58, 62, 48, 65, 39, 65],   // inferior temporal belly
+  ['C', 30, 65, 22, 63, 17, 59],   // sweep forward toward temporal pole
+  ['C', 13, 56, 12, 52, 14, 49],   // temporal pole (projects down-forward)
+  ['C', 12, 47, 10, 46, 9, 42],    // pre-temporal notch, back to frontal pole
   ['Z'],
 ]
+// Cerebellum — nestled below the occipital lobe, behind the brainstem
 const CEREBELLUM: Segment[] = [
-  ['M', 65, 62],
-  ['C', 72, 59, 81, 61, 86, 67],
-  ['C', 90, 73, 88, 81, 81, 83],
-  ['C', 73, 86, 63, 81, 60, 74],
-  ['C', 57, 68, 59, 63, 65, 62],
+  ['M', 66, 60],
+  ['C', 73, 57, 82, 59, 87, 66],
+  ['C', 91, 72, 89, 80, 82, 83],
+  ['C', 74, 85, 64, 81, 61, 73],
+  ['C', 58, 67, 60, 61, 66, 60],
   ['Z'],
 ]
+// Brainstem — descends forward of the cerebellum
 const STEM: Segment[] = [
-  ['M', 58, 70],
-  ['C', 57, 75, 57, 82, 59, 87],
-  ['C', 60, 90, 64, 90, 65, 86],
-  ['C', 66, 80, 65, 73, 64, 70],
+  ['M', 60, 63],
+  ['C', 58, 70, 57, 78, 59, 85],
+  ['C', 60, 89, 64, 89, 65, 84],
+  ['C', 66, 77, 65, 69, 65, 64],
 ]
-// Lateral sulcus (Sylvian fissure) — the major horizontal landmark separating frontal/parietal from temporal
+// Lateral sulcus (Sylvian fissure) — deep cleft separating the temporal lobe
+// (below) from the frontal and parietal lobes (above)
 const FISSURE: Segment[] = [
-  ['M', 16, 55],
-  ['C', 28, 58, 46, 55, 58, 50],
-  ['C', 65, 46, 72, 45, 78, 48],
+  ['M', 17, 51],
+  ['C', 28, 54, 40, 53, 50, 49],
+  ['C', 58, 46, 65, 45, 71, 47],
 ]
 const GYRI: Segment[][] = [
-  // Superior frontal sulcus (long horizontal)
-  [['M', 11, 21], ['C', 23, 14, 37, 12, 50, 13], ['C', 60, 14, 68, 11, 76, 19]],
+  // Superior frontal sulcus
+  [['M', 12, 22], ['C', 22, 16, 33, 14, 43, 15], ['C', 50, 15, 55, 13, 60, 15]],
   // Inferior frontal sulcus
-  [['M', 11, 37], ['C', 22, 32, 34, 31, 46, 33], ['C', 55, 34, 60, 31, 66, 34]],
-  // Precentral sulcus (just anterior to central sulcus)
-  [['M', 46, 4], ['C', 49, 14, 51, 27, 51, 40], ['C', 51, 49, 50, 54, 48, 59]],
-  // Central sulcus (Rolando) — primary motor/sensory boundary
-  [['M', 54, 4], ['C', 57, 14, 59, 27, 60, 40], ['C', 60, 50, 59, 56, 57, 61]],
+  [['M', 12, 35], ['C', 21, 31, 30, 30, 39, 32], ['C', 44, 33, 48, 32, 52, 34]],
+  // Precentral sulcus (anterior to the central sulcus; stops at the fissure)
+  [['M', 44, 8], ['C', 46, 18, 47, 28, 46, 37], ['C', 46, 42, 45, 45, 44, 47]],
+  // Central sulcus of Rolando — sinuous motor/sensory landmark
+  [['M', 53, 6], ['C', 56, 16, 55, 26, 57, 34], ['C', 58, 40, 57, 44, 57, 47]],
   // Postcentral sulcus
-  [['M', 63, 6], ['C', 66, 16, 68, 29, 68, 42], ['C', 68, 52, 66, 59, 64, 64]],
-  // Intraparietal sulcus (runs horizontally into parietal)
-  [['M', 69, 14], ['C', 74, 24, 78, 36, 79, 48], ['C', 79, 55, 76, 62, 72, 65]],
+  [['M', 62, 8], ['C', 65, 18, 67, 29, 66, 40], ['C', 66, 45, 65, 48, 64, 50]],
+  // Intraparietal sulcus (horizontal, sweeps into the parietal lobe)
+  [['M', 66, 30], ['C', 73, 32, 79, 35, 82, 41]],
   // Parieto-occipital sulcus
-  [['M', 79, 19], ['C', 85, 30, 88, 43, 85, 55]],
-  // Superior temporal sulcus (below Sylvian)
-  [['M', 21, 62], ['C', 35, 65, 52, 63, 64, 58], ['C', 72, 54, 78, 54, 82, 57]],
-  // Middle temporal sulcus / inferior temporal gyrus boundary
-  [['M', 26, 68], ['C', 38, 71, 54, 69, 65, 63]],
-  // Short frontal folds (inferior frontal branching)
-  [['M', 10, 29], ['C', 18, 25, 24, 27, 27, 32]],
-  [['M', 11, 47], ['C', 19, 44, 25, 44, 29, 49]],
-  // Short prefrontal convolutions
-  [['M', 9, 44], ['C', 15, 41, 19, 42, 22, 47]],
-  // Occipital sulcus
-  [['M', 84, 35], ['C', 88, 44, 87, 54, 83, 61]],
+  [['M', 80, 22], ['C', 85, 31, 87, 42, 84, 52]],
+  // Lateral occipital sulcus
+  [['M', 82, 40], ['C', 86, 45, 86, 51, 83, 56]],
+  // Superior temporal sulcus (parallels the Sylvian fissure below it)
+  [['M', 20, 57], ['C', 33, 60, 47, 58, 58, 54], ['C', 64, 51, 69, 51, 73, 53]],
+  // Middle temporal sulcus
+  [['M', 24, 62], ['C', 36, 65, 50, 63, 60, 58]],
+  // Short frontal convolution folds
+  [['M', 11, 28], ['C', 18, 24, 25, 26, 29, 31]],
+  [['M', 12, 43], ['C', 19, 40, 26, 41, 30, 46]],
 ]
 
 function rgba(hex: string, alpha: number) {
@@ -238,9 +242,9 @@ export default function Brain() {
       s.lineWidth = 1 * dpr
       s.strokeStyle = rgba(accent, 0.32)
       s.beginPath()
-      for (let y = 64; y <= 80; y += 2) {
+      for (let y = 62; y <= 82; y += 2) {
         for (let t = 0; t <= 12; t += 1) {
-          const x = 62 + ((84 - 62) * t) / 12
+          const x = 60 + ((88 - 60) * t) / 12
           const p = point(x, y + Math.sin(t * 0.85 + y) * 0.5)
           t === 0 ? s.moveTo(p.x, p.y) : s.lineTo(p.x, p.y)
         }
