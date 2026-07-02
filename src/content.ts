@@ -6,6 +6,7 @@
 export const links = {
   github: 'https://github.com/vashtag',
   linkedin: 'https://www.linkedin.com/in/siyavash-izadi/',
+  youtube: 'https://www.youtube.com/@vashtag',
   email: 'sizadiso@uwaterloo.ca',
 }
 
